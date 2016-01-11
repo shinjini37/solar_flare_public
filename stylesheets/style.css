@@ -1,53 +1,51 @@
 body {
 	background-color: #aaaaaa;
 	font-family: sans-serif;
+    width: 100vw;
+    height: 100vh;
 }
+
 .music-player-container{
-    padding: 1vw;
+    height: 15%;
     background-color: midnightblue;
-    height: 10vh;
 }
 .logo{
-    margin: 1vw;
     background-color: deepskyblue;
     display: inline-block;
-    width: 15vw;
+    width: 15%;
+    height: 100%;
 }
 .music-player {
-	margin: 1vw;
     background-color: blue;
     display: inline-block;
-    width: 75vw;
+    width: 85%;
+    height: 100%;
     float: right;
 }
 .main-body-container{
-    padding: 1vw;
+    height: 80%;
     background-color: mediumvioletred;
-    height: 80vh;
+
 }
 .nav-profile {
-	margin: 1vw;
     background-color: red;
     display: inline-block;
     float: left;
-    width: 15vw;
-    height: 75vh;
+    width: 20%;
+    height: 100%;
 
 }
 .main-view {
-	margin: 1vw;
     background-color: purple;
     display: inline-block;
-    width: 58vw;
-    height: 75vh;
+    width: 60%;
+    height: 100%;
 
 }
 .nav-music {
-	margin: 1vw;
     background-color: orange;
     display: inline-block;
     float: right;
-    width: 15vw;
-    height: 75vh;
-
+    width: 20%;
+    height: 100%;
 }
