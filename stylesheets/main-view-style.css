@@ -1,0 +1,12 @@
+.viewer{
+    height: 60%;
+    width: 100%;
+    background-color: rebeccapurple;
+}
+
+.enter-number{
+    height: 40%;
+    width: 100%;
+    background-color: dimgrey;
+    text-align: center;
+}

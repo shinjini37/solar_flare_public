@@ -5,17 +5,17 @@ body {
     height: 100vh;
 }
 
-.music-player-container{
+.top-body-container{
     height: 15%;
     background-color: midnightblue;
 }
-.logo{
+.logo-container{
     background-color: deepskyblue;
     display: inline-block;
     width: 15%;
     height: 100%;
 }
-.music-player {
+.music-player-container {
     background-color: blue;
     display: inline-block;
     width: 85%;
