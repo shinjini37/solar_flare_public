@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <link rel='stylesheet' href='../stylesheets/layout-style.css' />
-        <link rel='stylesheet' href='../stylesheets/profile-nav-style.css' />
-        <link rel='stylesheet' href='../stylesheets/main-view-style.css' />
+        <link rel='stylesheet' href='../public/stylesheets/layout-style.css' />
+        <link rel='stylesheet' href='../public/stylesheets/profile-nav-style.css' />
+        <link rel='stylesheet' href='../public/stylesheets/main-view-style.css' />
+        <link rel='stylesheet' href='../public/stylesheets/music-player-style.css' />
     </head>
     <body>
         <div class="top-body-container">
@@ -11,7 +12,11 @@
                 <div>Logo</div>
             </div>
             <div class="music-player-container">
-                <div class="music-player">Music Player</div>
+                <div class="music-player">Music Player <br>
+                    <div class="play"> Play </div>
+                    <div class="pause"> Pause </div>
+                    <div class="stop"> Stop </div>  
+                </div>
             </div>
         </div>
         <div class="main-body-container">
@@ -28,15 +33,20 @@
             <div class="main-view">
                 <div class="viewer">
                     Main View Window
-                    
+                    <div class="numbers">
                     NUMBERS!
+                    </div>
                 </div>  
                 <div class="enter-number">
                     <input type="text" class="enter-number-text" placeholder="Enter a number">
                     <button class="enter-number-button">Enter</button>
                 </div>  
             </div>
-            <div class="nav-music">Music Navigator</div>
+            <div class="nav-music">Music Navigator
+                <div class="recent">
+                    Recent music links
+                </div>    
+            </div>
         </div>
     </body>
 </html>

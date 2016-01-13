@@ -1,0 +1,21 @@
+.music-player{
+    text-align: center;    
+}
+
+.play{
+    background-color: black;
+    display: inline-block;
+    color: white;
+}
+
+.pause{
+    background-color: black;
+    display: inline-block;
+    color: white;
+}
+
+.stop{
+    background-color: black;
+    display: inline-block;
+    color: white;
+}
