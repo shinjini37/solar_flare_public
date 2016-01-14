@@ -9,13 +9,31 @@ $(document).ready(function() {
     $.ajax({
       url: '/enter_number',
       data: {
-        username: "anon",
-        num: number_entered,
+        'username': 'anon',
+        'num': number_entered,
       },
       type: 'POST',
       success: function(data) {
         // add a new list element containing the returned data
-        $(".numbers").append("<br>" + data.num + "</br>");
+        console.log(data);
+        $(".numbers").append("<br>" + data + "</br>");
+      },
+      error: function(xhr, status, error) {
+        console.log("Uh oh there was an error: " + error);
+      }
+    });
+  });
+  
+  $(".test-button").click(function() {
+
+    // send the AJAX request
+    $.ajax({
+      url: '/userlist',
+      data: {},
+      type: 'GET',
+      success: function(data) {
+        // print out data
+        console.log(data);
       },
       error: function(xhr, status, error) {
         console.log("Uh oh there was an error: " + error);

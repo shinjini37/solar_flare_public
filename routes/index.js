@@ -4,8 +4,9 @@ var router = express.Router();
 
 // Database in Memory
 var db = {
-    'anon':'1234'
-}
+    'anon': ['1234', '12224'],
+    'jake': ['2222']
+};
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
@@ -16,14 +17,14 @@ router.get('/', function (req, res, next) {
 });
 
 /* GET userlist JSON */
-/*
+
 router.get('/userlist', function (req, res, next) {
 
 	// Sending the db object
 	res.send(db);
 
 });
-*/
+
 
 /* POST to enter_number */
 router.post('/enter_number', function (req, res, next) {
@@ -33,10 +34,14 @@ router.post('/enter_number', function (req, res, next) {
 	var userNum = req.body.num;
 
 	// Adding the new entry to the db
-	db[userName] = userNum;
-
-	// Redirecting back to the root
-	res.redirect('/');
+	if (db[userName].length>0){
+         db[userName].push(userNum);
+    } else {
+        db[userName] = [userNum];
+    }
+    
+    // Sending the number entered
+	res.send(userNum);
 
 });
 

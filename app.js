@@ -14,11 +14,6 @@ var app = express();
 // app.set('views', path.join(__dirname, 'views'));
 // app.set('view engine', 'ejs');
 
-//var exphbs = require('express-handlebars');
-//app.engine('.hbs', exphbs({defaultLayout: 'index', extname: '.hbs'}));
-//app.set('views', path.join(__dirname, 'views'));
-//app.set('view engine', '.hbs');
-
 app.set('views', path.join(__dirname, 'views'));
 var exphbs = require('express-handlebars');
 app.engine('.hbs', exphbs({extname:'.hbs'}))
