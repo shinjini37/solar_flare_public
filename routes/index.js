@@ -39,10 +39,7 @@ router.post('/enter_number', function (req, res, next) {
     } else {
         db[userName] = [userNum];
     }
-    
-    // Sending the number entered
-	res.send(userNum);
-
+    res.send(userNum);
 });
 
 /* POST to deleteuser */

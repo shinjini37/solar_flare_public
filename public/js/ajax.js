@@ -14,9 +14,13 @@ $(document).ready(function() {
       },
       type: 'POST',
       success: function(data) {
-        // add a new list element containing the returned data
-        console.log(data);
-        $(".numbers").append("<br>" + data + "</br>");
+        
+        // clear text
+        $(".enter-number-text").val("");
+        
+        // show entered number
+        $(".entered-number").text(data);
+        
       },
       error: function(xhr, status, error) {
         console.log("Uh oh there was an error: " + error);
