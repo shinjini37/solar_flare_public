@@ -4,10 +4,7 @@ var router = express.Router();
 
 // Database in Memory
 var db = {
-	'david': 'apple',
-	'monde': 'orange',
-	'alan': 'pineapple',
-	'liang': 'banana'
+    'anon':'1234'
 }
 
 /* GET home page. */
@@ -19,22 +16,24 @@ router.get('/', function (req, res, next) {
 });
 
 /* GET userlist JSON */
+/*
 router.get('/userlist', function (req, res, next) {
 
 	// Sending the db object
 	res.send(db);
 
 });
+*/
 
-/* POST to adduser */
-router.post('/adduser', function (req, res, next) {
+/* POST to enter_number */
+router.post('/enter_number', function (req, res, next) {
 
 	// Catching variables passed in the form
 	var userName = req.body.username;
-	var userFruit = req.body.userfruit;
+	var userNum = req.body.num;
 
 	// Adding the new entry to the db
-	db[userName] = userFruit;
+	db[userName] = userNum;
 
 	// Redirecting back to the root
 	res.redirect('/');
@@ -42,6 +41,7 @@ router.post('/adduser', function (req, res, next) {
 });
 
 /* POST to deleteuser */
+/*
 router.post('/deleteuser', function (req, res, next) {
 
 	// Catching variables passed in the form
@@ -62,5 +62,6 @@ router.post('/deleteuser', function (req, res, next) {
 		res.render('error', err);
 	}
 });
+*/
 
 module.exports = router;

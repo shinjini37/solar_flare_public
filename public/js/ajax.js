@@ -1,15 +1,39 @@
 $(document).ready(function() {
 
-  $(".find-submit").click(function() {
+  $(".enter-number-button").click(function() {
 
-    // get the username
-    var name = $(".find").val();
+    // get the number
+    var number_entered = $(".enter-number-text").val();
 
     // send the AJAX request
     $.ajax({
-      url: '/findfruit',
+      url: '/enter_number',
       data: {
-        username: name,
+        username: "anon",
+        num: number_entered,
+      },
+      type: 'POST',
+      success: function(data) {
+        // add a new list element containing the returned data
+        $(".numbers").append("<br>" + data.num + "</br>");
+      },
+      error: function(xhr, status, error) {
+        console.log("Uh oh there was an error: " + error);
+      }
+    });
+  });
+
+  /*
+  $(".something").click(function() {
+
+    // get the number
+    var number_entered = $(".enter-number-text").val();
+
+    // send the AJAX request
+    $.ajax({
+      url: '/enter-number',
+      data: {
+        number: number_entered,
       },
       type: 'GET',
       success: function(data) {
@@ -21,7 +45,6 @@ $(document).ready(function() {
       }
     });
   });
-
 
   $(".add-submit").click(function() {
 
@@ -46,4 +69,5 @@ $(document).ready(function() {
       }
     });
   });
+  */
 });
