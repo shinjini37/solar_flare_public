@@ -11,9 +11,6 @@ var pie = '314159265358979323846264338327950288419716939937510582';
 /* GET home page. */
 router.get('/', function (req, res, next) {
 
-  // Rendering the index view with the title 'Sign Up'
-  res.render('index', { title: 'Numbers'});
-  
   // Session Variables
   sess=req.session;
   // Current number
@@ -21,7 +18,37 @@ router.get('/', function (req, res, next) {
     sess.curr = pie;    
   }
   
-  
+  // showing recent numbers on number navigation
+  var recentsasstring = '';
+  db.recentnums.find({}).toArray(function(err, list){
+      if (list.length>0){
+
+          var recents = list[0]['recents'];
+          //console.log(recents);
+          var limit;
+          if (recents.length>10){
+              limit = 10;
+          } else {
+              limit = recents.length;
+          }          
+          //console.log("limit");
+          //console.log(limit);
+          
+          for (var i = 0; i<limit; i++){
+              var j = (recents.length - 1) - i;
+              recentsasstring = recentsasstring + ' <br> ' + recents[j].name + ' ' + recents[j].num;
+              console.log(recentsasstring);
+          }
+      }
+      console.log("recents as string:")
+      console.log(recentsasstring);
+      // Rendering the index view with the title 'Sign Up'
+      res.render('index', { title: 'Numbers', recents: recentsasstring});
+  });
+
+
+    
+    
   // Changing current number to play to pi
   /*
   db.current.find({}).toArray(function (err, currentval) {

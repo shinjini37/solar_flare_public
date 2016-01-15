@@ -14,11 +14,13 @@ var sounds = [
   path + "E5.mp3",
 ];
 
-var play = function(num){
-    var audio = new Audio(sounds[num]);
+// singlenum is a Number
+var play = function(singlenum){
+    var audio = new Audio(sounds[singlenum]);
     audio.play();
 }
 
+// num is a string
 var play_num = function(num){
         var notestoplay = [];
         for(var i = 0; i < num.length; i++){
