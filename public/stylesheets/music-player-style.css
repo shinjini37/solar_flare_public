@@ -1,21 +1,14 @@
 .music-player{
-    text-align: center;    
+    text-align: center;  
 }
 
-.play{
+.music-player button{
     background-color: black;
     display: inline-block;
     color: white;
+    border: 0px;
+    height: 40px;
+    width: 40px;
+    font-size: 1em;
 }
 
-.pause{
-    background-color: black;
-    display: inline-block;
-    color: white;
-}
-
-.stop{
-    background-color: black;
-    display: inline-block;
-    color: white;
-}

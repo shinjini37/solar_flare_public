@@ -25,6 +25,10 @@ router.get('/userlist', function (req, res, next) {
 
 });
 
+router.get('/play', function (req, res, next) {
+    
+});
+
 
 /* POST to enter_number */
 router.post('/enter_number', function (req, res, next) {

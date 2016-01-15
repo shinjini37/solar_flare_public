@@ -8,6 +8,12 @@
     width: 60%;
 }
 
+.entered-number{
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    font-size: 5em;
+    color: whitesmoke;
+}
+
 .viewer{
     height: 60%;
     width: 100%;
