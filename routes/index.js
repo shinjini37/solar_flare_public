@@ -3,8 +3,10 @@ var router = express.Router();
 
 // Access to real DB
 var db = require('../db-setup.js');
+var sess;
 
 var pie = '314159265358979323846264338327950288419716939937510582';
+
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
@@ -12,15 +14,23 @@ router.get('/', function (req, res, next) {
   // Rendering the index view with the title 'Sign Up'
   res.render('index', { title: 'Numbers'});
   
+  // Session Variables
+  sess=req.session;
+  // Current number
+  if (!sess.curr){
+    sess.curr = pie;    
+  }
+  
+  
   // Changing current number to play to pi
+  /*
   db.current.find({}).toArray(function (err, currentval) {
-      if (currentval.length>0){
-          db.current.update({_id: 'current'}, {$set: {'current': pie}});
-      } else {
-         db.current.insert({_id: 'current', 'current': pie}); // this is buggy, if another user refreshes,
+      if (!(currentval.length>0)){
+          db.current.update({_id: 'current'}, {$set: {'current': pie}}); // this is buggy, if another user refreshes,
                                               // everyone's current goes to pie. 
-      }
+      } 
   });
+  */
 });
 
 /* GET test */
@@ -41,10 +51,13 @@ router.get('/test', function (req, res, next) {
 
 /* GET play usernumber*/
 router.get('/play', function (req, res, next) {
+    res.send(sess.curr);
+    /*
     db.current.find({_id: 'current'}).toArray(function(err, list){
         var curr = list[0]['current'];
         res.send(curr); 
     })
+    */
 });
 
 
@@ -56,7 +69,8 @@ router.post('/enter_number', function (req, res, next) {
 	var userNum = req.body.num;
     
     // update current number
-    db.current.update({_id: 'current'}, {$set: {'current': userNum}});
+    sess.curr = userNum;
+    //db.current.update({_id: 'current'}, {$set: {'current': userNum}});
     
 	// Adding the new entry to the db
     db.recentnums.find({}).toArray(function(err, list){
