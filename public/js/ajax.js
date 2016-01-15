@@ -39,7 +39,6 @@ $(document).ready(function() {
       type: 'GET',
       success: function(data) {
         // print out data
-        console.log(data);
         play_num(data);
       },
       error: function(xhr, status, error) {
@@ -53,7 +52,7 @@ $(document).ready(function() {
 
     // send the AJAX request
     $.ajax({
-      url: '/userlist',
+      url: '/test',
       data: {},
       type: 'GET',
       success: function(data) {
