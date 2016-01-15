@@ -8,6 +8,9 @@ var db = {
     'jake': ['2222']
 };
 
+var pie = '314159265358979323846264338327950288419716939937510582';
+var curr = pie;
+
 /* GET home page. */
 router.get('/', function (req, res, next) {
 
@@ -25,8 +28,10 @@ router.get('/userlist', function (req, res, next) {
 
 });
 
+/* play usernumber*/
 router.get('/play', function (req, res, next) {
-    
+    console.log(curr);
+    res.send(curr);
 });
 
 
@@ -36,7 +41,8 @@ router.post('/enter_number', function (req, res, next) {
 	// Catching variables passed in the form
 	var userName = req.body.username;
 	var userNum = req.body.num;
-
+    curr = userNum;
+    
 	// Adding the new entry to the db
 	if (db[userName].length>0){
          db[userName].push(userNum);
@@ -45,6 +51,9 @@ router.post('/enter_number', function (req, res, next) {
     }
     res.send(userNum);
 });
+
+
+
 
 /* POST to deleteuser */
 /*

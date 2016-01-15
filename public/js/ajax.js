@@ -21,12 +21,33 @@ $(document).ready(function() {
         // show entered number
         $(".entered-number").text(data);
         
+        play_num(data);
+        
       },
       error: function(xhr, status, error) {
         console.log("Uh oh there was an error: " + error);
       }
     });
   });
+  
+  $(".play").click(function(){
+
+    // send the AJAX request
+    $.ajax({
+      url: '/play',
+      data: {a:'a'},
+      type: 'GET',
+      success: function(data) {
+        // print out data
+        console.log(data);
+        play_num(data);
+      },
+      error: function(xhr, status, error) {
+        console.log("Uh oh there was an error: " + error);
+      }
+    });
+  });
+  
   
   $(".test-button").click(function() {
 
@@ -44,6 +65,8 @@ $(document).ready(function() {
       }
     });
   });
+  
+  
 
   /*
   $(".something").click(function() {

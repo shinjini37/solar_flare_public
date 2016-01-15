@@ -19,6 +19,25 @@ var play = function(num){
     audio.play();
 }
 
+var play_num = function(num){
+        var notestoplay = [];
+        for(var i = 0; i < num.length; i++){
+            var toplay = Number(num[i]);    // note to be played
+            var playindex = 0;              // index to get it from the notestoplay array 
+            notestoplay.push(toplay);
+            setTimeout(function(){play(notestoplay[playindex]); playindex++ }, (i)*300); // i sets the time for
+                                                                                          // the function to be played,
+                                                                                          // but it needs to increment 
+                                                                                          // through playindex to actually
+                                                                                          // play correctly.
+                                                                                          // Note, it has access to i, etc,
+                                                                                          // but those are the static values
+                                                                                          // after the for loop has stopped
+        }
+} 
+       
+
+/*
 $(document).ready(function() {
     $(".play").click(function(){
         var num = $(".enter-number-text").val();
@@ -41,6 +60,8 @@ $(document).ready(function() {
         //audio.play();
     })
 });
+*/
+
 
 /*Cells = new Mongo.Collection("cells");
 
