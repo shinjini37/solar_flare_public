@@ -78,6 +78,7 @@ router.get('/test', function (req, res, next) {
 
 /* GET play usernumber*/
 router.get('/play', function (req, res, next) {
+    sess=req.session;
     res.send(sess.curr);
     /*
     db.current.find({_id: 'current'}).toArray(function(err, list){
@@ -96,6 +97,7 @@ router.post('/enter_number', function (req, res, next) {
 	var userNum = req.body.num;
     
     // update current number
+    sess=req.session;
     sess.curr = userNum;
     //db.current.update({_id: 'current'}, {$set: {'current': userNum}});
     
