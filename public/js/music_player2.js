@@ -13,39 +13,25 @@ $(document).ready(function(){
     path + "E5.mp3",
     ];
     
-    var timeouts = [];
-    var pie = '314159265358979323846264338327950288419716939937510582';
-    var current = pie;
-    var paused = false;
-    var curr_index = 0;
-    
-        
-    var convert = function(notestoplay_string){
+    var play_num = function(notestoplay_string){
+        console.log("in play_num");
+        var len = notestoplay_string.length;
         var notestoplay_music = [];
+        var notestoplay_i = 1; // to prevent same note playing again
         for (var i = 0; i< notestoplay_string.length; i++){
             var currnote = soundManager.createSound({
                             url: sounds[notestoplay_string[i]]
                             });
             notestoplay_music.push(currnote);
         }
-        return notestoplay_music;        
-    }
-    
-    var play_num = function(notestoplay_string){
-        console.log("in play_num");
-        var notestoplay_music = convert(notestoplay_string);
-        var notestoplay_i = 0; 
-
         for (var i = 0; i< notestoplay_string.length; i++){
-            timeouts.push(setTimeout( function() {
-                notestoplay_music[notestoplay_i].play();
-                console.log(notestoplay_i); 
-                curr_index = notestoplay_i;
-                notestoplay_i++;
-                }, i*300));
+            notestoplay_music[i].onPosition(300, function(eventPosition){
+                                    notestoplay_music[notestoplay_i].play(); 
+                                    notestoplay_i++;
+            });
         }
+        notestoplay_music[0].play();
     }
-
     
     soundManager.setup({
         url: '/soundmanager2/sfw',
@@ -71,7 +57,7 @@ $(document).ready(function(){
                         
                         // show entered number
                         $(".entered-number").text(data);
-                        current = data;
+                        
                         play_num(data);
                         
                     },
@@ -83,34 +69,23 @@ $(document).ready(function(){
             });
             
             $(".play").click(function(){
-                if (paused === false){
-                    play_num(current);
-                } else {
-                    play_num(current.slice(curr_index+1));
-                    soundManager.resumeAll();
+
+                // send the AJAX request
+                $.ajax({
+                url: '/play',
+                data: {a:'a'},
+                type: 'GET',
+                success: function(data) {
+                    // print out data
+                    play_num(data);
+                },
+                error: function(xhr, status, error) {
+                    console.log("Uh oh there was an error: " + error);
                 }
-                
+                });
             });
             $(".stop").click(function(){
-                paused = false;
-                for (var i = 0; i < timeouts.length; i++) {
-                    clearTimeout(timeouts[i]);
-                }
-                
-                //quick reset of the timer array you just cleared
-                timeouts = [];
                soundManager.stopAll(); 
-            });
-            
-            $(".pause").click(function(){
-                paused = true; 
-                for (var i = 0; i < timeouts.length; i++) {
-                    clearTimeout(timeouts[i]);
-                }
-                
-                //quick reset of the timer array you just cleared
-                timeouts = [];
-                soundManager.pauseAll();
             });
 
         },

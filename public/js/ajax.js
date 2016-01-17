@@ -1,51 +1,7 @@
 $(document).ready(function() {
 
-  $(".enter-number-button").click(function() {
 
-    // get the number
-    var number_entered = $(".enter-number-text").val();
-
-    // send the AJAX request
-    $.ajax({
-      url: '/enter_number',
-      data: {
-        'username': 'anon',
-        'num': number_entered,
-      },
-      type: 'POST',
-      success: function(data) {
-        
-        // clear text
-        $(".enter-number-text").val("");
-        
-        // show entered number
-        $(".entered-number").text(data);
-        
-        play_num(data);
-        
-      },
-      error: function(xhr, status, error) {
-        console.log("Uh oh there was an error: " + error);
-      }
-    });
-  });
   
-  $(".play").click(function(){
-
-    // send the AJAX request
-    $.ajax({
-      url: '/play',
-      data: {a:'a'},
-      type: 'GET',
-      success: function(data) {
-        // print out data
-        play_num(data);
-      },
-      error: function(xhr, status, error) {
-        console.log("Uh oh there was an error: " + error);
-      }
-    });
-  });
   
   
   $(".test-button").click(function() {

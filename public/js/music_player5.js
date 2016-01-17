@@ -19,34 +19,34 @@ $(document).ready(function(){
     var paused = false;
     var curr_index = 0;
     
-        
-    var convert = function(notestoplay_string){
-        var notestoplay_music = [];
-        for (var i = 0; i< notestoplay_string.length; i++){
-            var currnote = soundManager.createSound({
-                            url: sounds[notestoplay_string[i]]
-                            });
-            notestoplay_music.push(currnote);
-        }
-        return notestoplay_music;        
-    }
-    
     var play_num = function(notestoplay_string){
         console.log("in play_num");
-        var notestoplay_music = convert(notestoplay_string);
-        var notestoplay_i = 0; 
+        var len = notestoplay_string.length;
+        var last = soundManager.createSound({
+                        url: sounds[notestoplay_string[len-1]]
+                    });
+        var nextnote= last;
+        var currnote;
+        var notestoplay_music = [last];
+        var notestoplay_i = 1; // to prevent same note playing again
+        for (var i = 1; i< notestoplay_string.length; i++){
+            currnote = soundManager.createSound({
+                            url: sounds[notestoplay_string[len-1-i]],
+                            onplay: function(){
 
-        for (var i = 0; i< notestoplay_string.length; i++){
-            timeouts.push(setTimeout( function() {
-                notestoplay_music[notestoplay_i].play();
-                console.log(notestoplay_i); 
-                curr_index = notestoplay_i;
-                notestoplay_i++;
-                }, i*300));
+                                timeouts.push(setTimeout(function(){
+                                    notestoplay_music[len-1 - notestoplay_i].play(); 
+                                    notestoplay_i++;
+                                    }, 300));
+
+                            }
+                        });
+            notestoplay_music.push(currnote);
+            nextnote = currnote;
         }
+        notestoplay_music[len-1].play();
     }
-
-    
+       
     soundManager.setup({
         url: '/soundmanager2/sfw',
         onready: function() {
@@ -86,7 +86,6 @@ $(document).ready(function(){
                 if (paused === false){
                     play_num(current);
                 } else {
-                    play_num(current.slice(curr_index+1));
                     soundManager.resumeAll();
                 }
                 
