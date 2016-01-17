@@ -36,7 +36,7 @@ router.get('/', function (req, res, next) {
           
           for (var i = 0; i<limit; i++){
               var j = (recents.length - 1) - i;
-              recentsasstring = recentsasstring + ' <br> ' + recents[j].name + ' ' + recents[j].num;
+              recentsasstring = recentsasstring + ' <br> ' + recents[j].name + ' played ' + recents[j].num;
               console.log(recentsasstring);
           }
       }
@@ -90,7 +90,7 @@ router.get('/play', function (req, res, next) {
 
 
 /* POST to enter_number */
-router.post('/enter_number', function (req, res, next) {
+router.get('/enter_number', function (req, res, next) {
 
 	// Catching variables passed in the form
 	var userName = req.body.username;
@@ -102,7 +102,7 @@ router.post('/enter_number', function (req, res, next) {
     //db.current.update({_id: 'current'}, {$set: {'current': userNum}});
     
 	// Adding the new entry to the db
-    db.recentnums.find({}).toArray(function(err, list){
+    db.recentnums.find({}).toArray(function (err, list){
         if (list.length>0){
             db.recentnums.update({_id: "recents"}, { $push: {recents:{name: userName, num:userNum}}});
         } else { // if recentnums is empty, make an empty array and populate it
@@ -112,6 +112,47 @@ router.post('/enter_number', function (req, res, next) {
     });
     // send back the number entered
     res.send(userNum);
+});
+
+router.post('/signin', function (req, res, next) {
+  var userName = req.body.username;
+  var password = req.body.password;
+  console.log("120:");
+  console.log(userName);
+  console.log(password);
+
+  db.people.find({'username': userName}).toArray(function(err, list) {
+    console.log(list);
+    if (list.length>0){
+      if (password === list[0]['password']) {
+        res.send("sign in successfully.");
+      } else {
+        res.send("wrong password.");
+      }
+    } else {
+      res.send("username does not exist.")
+    }
+  });
+
+});
+
+router.post('/signup', function (req, res, next) {
+  var userName = req.body.username;
+  var password = req.body.password;
+  console.log("142:");
+  console.log(userName);
+  console.log(password);
+
+  db.people.find({'username': userName}).toArray(function(err, list) {
+    console.log(list);
+    if (list.length>0){
+      res.send("username already exists.");
+    } else { 
+      db.people.insert({'username': userName, 'password': password});
+      res.send("sign up successfully.");
+    }
+  });
+
 });
 
 module.exports = router;

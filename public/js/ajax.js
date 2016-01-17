@@ -4,14 +4,18 @@ $(document).ready(function() {
 
     // get the number
     var number_entered = $(".enter-number-text").val();
+    var recentsasstring = $(".recent").html();
+    console.log("foo");
+    console.log(recentsasstring);
+    var datavar = {
+        'username': 'anon',
+        'num': number_entered,
+      };
 
     // send the AJAX request
     $.ajax({
       url: '/enter_number',
-      data: {
-        'username': 'anon',
-        'num': number_entered,
-      },
+      data: datavar,
       type: 'POST',
       success: function(data) {
         
@@ -20,6 +24,14 @@ $(document).ready(function() {
         
         // show entered number
         $(".entered-number").text(data);
+
+        // reload recent numbers
+      $(".recent").fadeOut(800, function() {
+        recentsasstring = ' <br> ' + datavar['username'] + ' played ' + datavar['num'] + recentsasstring;
+        console.log(recentsasstring);
+        $(".recent").html(recentsasstring);
+      });
+      $(".recent").fadeIn().delay(2000);
         
         play_num(data);
         
@@ -61,6 +73,48 @@ $(document).ready(function() {
       },
       error: function(xhr, status, error) {
         console.log("Uh oh there was an error: " + error);
+      }
+    });
+  });
+
+  $(".sign-in-button").click(function() {
+    var entered_username = $(".username").val();
+    var entered_password = $(".password").val();
+    var entered_data = {
+      'username': entered_username,
+      'password': entered_password
+    };
+
+    // send the AJAX request
+    $.ajax({
+      url: '/signin',
+      data: entered_data,
+      type: 'POST',
+      success: function(data) {
+        console.log(data);
+      },
+      error: function() {
+      }
+    });
+  });
+
+    $(".sign-up-button").click(function() {
+    var entered_username = $(".username").val();
+    var entered_password = $(".password").val();
+    var entered_data = {
+      'username': entered_username,
+      'password': entered_password
+    };
+
+    // send the AJAX request
+    $.ajax({
+      url: '/signup',
+      data: entered_data,
+      type: 'POST',
+      success: function(data) {
+        console.log(data);
+      },
+      error: function() {
       }
     });
   });

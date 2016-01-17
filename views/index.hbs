@@ -50,9 +50,14 @@
                 </div>  
             </div>
             <div class="nav-music">Music Navigator
+                <br> Recent music links
                 <div class="recent">
-                    Recent music links
-                    <br>
+                    <script>
+                        setInterval("my_function();",5000); 
+                        function my_function(){
+                            $('#recent').load(location.href + ' #recent');
+                        }
+                    </script>
                     {{{recents}}}
                 </div>    
             </div>
