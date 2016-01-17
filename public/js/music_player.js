@@ -56,17 +56,13 @@ $(document).ready(function(){
 
                 // get the number
                 var number_entered = $(".enter-number-text").val();
-                
-                var recentsasstring = $(".recent").html();
-                var datavar = {
-                    'username': 'anon',
-                    'num': number_entered,
-                };
-                
                 // send the AJAX request
                 $.ajax({
                     url: '/enter_number',
-                    data: datavar,
+                    data: {
+                        'username': 'anon',
+                        'num': number_entered,
+                    },
                     type: 'POST',
                     success: function(data) {
                         
@@ -75,18 +71,7 @@ $(document).ready(function(){
                         
                         // show entered number
                         $(".entered-number").text(data);
-                        
-                        // reload recent numbers
-                        $(".recent").fadeOut(800, function() {
-                            recentsasstring = ' <br> ' + datavar['username'] + ' played ' + datavar['num'] + recentsasstring;
-                            console.log(recentsasstring);
-                            $(".recent").html(recentsasstring);
-                        });
-                        $(".recent").fadeIn().delay(2000);
-                            
-                        //update current number    
                         current = data;
-                        // play the number
                         play_num(data);
                         
                     },
