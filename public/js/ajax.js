@@ -1,7 +1,4 @@
 $(document).ready(function() {
-
-
-  
   
   
   $(".test-button").click(function() {
@@ -17,6 +14,48 @@ $(document).ready(function() {
       },
       error: function(xhr, status, error) {
         console.log("Uh oh there was an error: " + error);
+      }
+    });
+  });
+
+  $(".sign-in-button").click(function() {
+    var entered_username = $(".username").val();
+    var entered_password = $(".password").val();
+    var entered_data = {
+      'username': entered_username,
+      'password': entered_password
+    };
+
+    // send the AJAX request
+    $.ajax({
+      url: '/signin',
+      data: entered_data,
+      type: 'POST',
+      success: function(data) {
+        console.log(data);
+      },
+      error: function() {
+      }
+    });
+  });
+
+    $(".sign-up-button").click(function() {
+    var entered_username = $(".username").val();
+    var entered_password = $(".password").val();
+    var entered_data = {
+      'username': entered_username,
+      'password': entered_password
+    };
+
+    // send the AJAX request
+    $.ajax({
+      url: '/signup',
+      data: entered_data,
+      type: 'POST',
+      success: function(data) {
+        console.log(data);
+      },
+      error: function() {
       }
     });
   });
