@@ -14,9 +14,11 @@ $(document).ready(function(){
     ];
     
     var timeouts = [];
-    var pie = '314159265358979323846264338327950288419716939937510582';
+    var pie =  '31415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679';
     var current = pie;
     var paused = false;
+    
+    var current_paused = current;
     var curr_index = 0;
     
         
@@ -37,12 +39,24 @@ $(document).ready(function(){
         var notestoplay_i = 0; 
 
         for (var i = 0; i< notestoplay_string.length; i++){
-            timeouts.push(setTimeout( function() {
-                notestoplay_music[notestoplay_i].play();
-                console.log(notestoplay_i); 
-                curr_index = notestoplay_i;
-                notestoplay_i++;
-                }, i*300));
+            if (!(i === notestoplay_music.length-1)){
+                timeouts.push(setTimeout( function() {
+                    notestoplay_music[notestoplay_i].play();
+                    curr_index = notestoplay_i;
+                    notestoplay_i++;
+                    }, i*300));
+            } else {
+                timeouts.push(setTimeout( function() {
+                    notestoplay_music[notestoplay_i].play({
+                        onfinish: function(){
+                            paused = false;
+                            curr_index = 0;
+                            current_paused = current;
+                    }});
+                    curr_index = notestoplay_i;
+                    notestoplay_i++;
+                    }, i*300));
+            }
         }
     }
 
@@ -84,10 +98,12 @@ $(document).ready(function(){
             
             $(".play").click(function(){
                 if (paused === false){
+                    current_paused = current;
                     play_num(current);
                 } else {
-                    play_num(current.slice(curr_index+1));
-                    soundManager.resumeAll();
+                    current_paused = current_paused.slice(curr_index+1); 
+                    play_num(current_paused);
+                    //soundManager.resumeAll();
                 }
                 
             });
@@ -99,7 +115,7 @@ $(document).ready(function(){
                 
                 //quick reset of the timer array you just cleared
                 timeouts = [];
-               soundManager.stopAll(); 
+               //soundManager.stopAll(); 
             });
             
             $(".pause").click(function(){
@@ -110,7 +126,7 @@ $(document).ready(function(){
                 
                 //quick reset of the timer array you just cleared
                 timeouts = [];
-                soundManager.pauseAll();
+                //soundManager.pauseAll();
             });
 
         },
