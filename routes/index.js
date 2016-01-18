@@ -155,4 +155,8 @@ router.post('/signup', function (req, res, next) {
 
 });
 
+router.post('/signout', function (req, res, next) {
+  res.send("ok");
+});
+
 module.exports = router;

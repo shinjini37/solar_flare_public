@@ -32,14 +32,17 @@ $(document).ready(function() {
       data: entered_data,
       type: 'POST',
       success: function(data) {
-        console.log(data);
+        if (data === "sign in successfully.") {
+          $(".sign-in").replaceWith("<h2> Welcome " + entered_username + " </h2>");
+          $(".sign-up").replaceWith("<div class='sign-out'>" + " <button class='sign-out-button'>Sign Out</button>" + "</div>");
+        }
       },
       error: function() {
       }
     });
   });
 
-    $(".sign-up-button").click(function() {
+  $(".sign-up-button").click(function() {
     var entered_username = $(".username").val();
     var entered_password = $(".password").val();
     var entered_data = {
@@ -58,6 +61,11 @@ $(document).ready(function() {
       error: function() {
       }
     });
+  });
+
+  $(".sign-out-button").click(function() {
+    console.log("feeee");
+    location.reload();
   });
   
   
