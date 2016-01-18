@@ -1,5 +1,12 @@
 .music-player{
-    text-align: center;  
+    position: center;
+    background-color: darkslategrey;
+    color: whitesmoke;
+    width: 80%;
+    height: 60%;
+    margin: auto;
+    display: flex;
+    align-items: center;
 }
 
 .music-player button{
@@ -7,8 +14,25 @@
     display: inline-block;
     color: white;
     border: 0px;
-    height: 40px;
-    width: 40px;
+    height: 100%;
+    width: 10%;
     font-size: 1em;
 }
+
+.playing_user_container{
+    height: 100%;
+    width: 70%;
+}
+
+.player_text{
+}
+
+.playing{
+    width: 50%;
+}
+
+.user{
+    width: 20%;
+}
+
 

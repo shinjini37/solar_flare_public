@@ -3,10 +3,13 @@ var router = express.Router();
 
 // Access to real DB
 var db = require('../db-setup.js');
+
+// username <--bad implementation, need to convert to session variable
+var username = 'anon';
+
 var sess;
 
 var pie = '31415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679';
-
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
@@ -19,34 +22,37 @@ router.get('/', function (req, res, next) {
   }
   
   // showing recent numbers on number navigation
-  var recentsasstring = '';
-  db.recentnums.find({}).toArray(function(err, list){
-      if (list.length>0){
-
-          var recents = list[0]['recents'];
-          //console.log(recents);
-          var limit;
-          if (recents.length>10){
-              limit = 10;
-          } else {
-              limit = recents.length;
-          }          
-          //console.log("limit");
-          //console.log(limit);
-          
-          for (var i = 0; i<limit; i++){
-              var j = (recents.length - 1) - i;
-              recentsasstring = recentsasstring + ' <br> ' + recents[j].name + ' played ' + recents[j].num;
-              console.log(recentsasstring);
-          }
-      }
-      console.log("recents as string:")
-      console.log(recentsasstring);
+      
+        var recentsasstring = '';
+        
+        db.recentnums.find({}).toArray(function(err, list){
+                if (list.length>0){
+                        var recents = list[0]['recents'];
+                        var limit;
+                        if (recents.length>10){
+                            limit = 10;
+                        } else {
+                            limit = recents.length;
+                        }          
+                        for (var i = 0; i<limit; i++){
+                            var j = (recents.length - 1) - i;
+                            var user_profile = '<a href="./profile/' + recents[j].name + '">' + recents[j].name + '</a>';
+                            var user_number = recents[j].num;
+                            var user_number_short = user_number;
+                            if (user_number.length>5){
+                                user_number_short = user_number.slice(0,5) + '...';
+                            }
+                            var user_number_play = '<div class="play_recent" style="display:inline-block" data-username='+recents[j].name+' data-num='+user_number+'>' + user_number_short +'</div>';//+ '<input type="text" class="hidden" style="display:none" value='+user_number+'></input></div>';
+                            
+                            recentsasstring = recentsasstring + ' <br> ' + user_profile + ' played ' + user_number_play;
+                        }
+                }
       // Rendering the index view with the title 'Sign Up'
       res.render('index', { title: 'Numbers', recents: recentsasstring});
-  });
 
-
+          
+      });
+      
     
     
   // Changing current number to play to pi
@@ -60,8 +66,20 @@ router.get('/', function (req, res, next) {
   */
 });
 
-/* GET test */
+router.get('/recent_play', function(req, res, next){
+   var num = req.params.num;
+   res.send(num);
+});
 
+/*for updating recents*/
+/*
+router.get('/update_recents', function(req, res, next){
+    var recentsasstring = recentsasstring();
+    res.send(recentsasstring);
+});
+*/
+
+/* GET test */
 router.get('/test', function (req, res, next) {
 
     // prints stuff, for debugging
@@ -93,7 +111,6 @@ router.get('/play', function (req, res, next) {
 router.post('/enter_number', function (req, res, next) {
 
 	// Catching variables passed in the form
-	var userName = req.body.username;
 	var userNum = req.body.num;
     
     // update current number
@@ -104,14 +121,23 @@ router.post('/enter_number', function (req, res, next) {
 	// Adding the new entry to the db
     db.recentnums.find({}).toArray(function (err, list){
         if (list.length>0){
-            db.recentnums.update({_id: "recents"}, { $push: {recents:{name: userName, num:userNum}}});
+            db.recentnums.update({_id: "recents"}, { $push: {recents:{name: username, num:userNum}}});
         } else { // if recentnums is empty, make an empty array and populate it
             db.recentnums.insert({_id: "recents", recents:[]});
-            db.recentnums.update({_id: "recents"}, { $push: {recents:{name: userName, num:userNum}}});
+            db.recentnums.update({_id: "recents"}, { $push: {recents:{name: username, num:userNum}}});
+        }
+    });
+    
+    db.usernums.find({}).toArray(function (err, list){
+        if (list.length>0){
+            db.usernums.update({username: username}, { $push: {recents:{num:userNum}}});
+        } else { // if recentnums is empty, make an empty array and populate it
+            db.usernums.insert({username: username, recents:[]});
+            db.usernums.update({username: username}, { $push: {recents:{num:userNum}}});
         }
     });
     // send back the number entered
-    res.send(userNum);
+    res.send(username);
 });
 
 router.post('/signin', function (req, res, next) {
@@ -125,6 +151,7 @@ router.post('/signin', function (req, res, next) {
     console.log(list);
     if (list.length>0){
       if (password === list[0]['password']) {
+        username = userName;
         res.send("sign in successfully.");
       } else {
         res.send("wrong password.");
@@ -139,9 +166,6 @@ router.post('/signin', function (req, res, next) {
 router.post('/signup', function (req, res, next) {
   var userName = req.body.username;
   var password = req.body.password;
-  console.log("142:");
-  console.log(userName);
-  console.log(password);
 
   db.people.find({'username': userName}).toArray(function(err, list) {
     console.log(list);
@@ -149,6 +173,7 @@ router.post('/signup', function (req, res, next) {
       res.send("username already exists.");
     } else { 
       db.people.insert({'username': userName, 'password': password});
+      username = userName;
       res.send("sign up successfully.");
     }
   });
@@ -156,6 +181,7 @@ router.post('/signup', function (req, res, next) {
 });
 
 router.post('/signout', function (req, res, next) {
+  username = 'anon';
   res.send("ok");
 });
 

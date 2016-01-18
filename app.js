@@ -7,8 +7,7 @@ var bodyParser = require('body-parser');
 var session = require('express-session');
 
 var routes = require('./routes/index');
-//var player = require('./public/js/music_player');
-// var users = require('./routes/users');
+var profile = require('./routes/profile');
 
 var app = express();
 
@@ -33,8 +32,7 @@ app.use(session({secret: 'suchsecretwow',
     saveUninitialized: false}));
 
 app.use('/', routes);
-//app.use('/', player);
-//app.use('/users', users);
+app.use('/profile', profile);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

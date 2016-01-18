@@ -12,21 +12,25 @@
         <script src="/js/ajax.js" type="text/javascript"></script>
     </head>
     <body>
+        <!----
         <div class="top-body-container">
             <div class="logo-container">
                 <div>Logo</div>
             </div>
             <div class="music-player-container">
-                <div class="music-player">Music Player <br>
+                <div class="music-player"><br>
                     <button class="play"> &#9658; </button>
-                    <!--
-                    
-                    -->
                     <button class="pause"> &#10074;&#10074; </button>
                     <button class="stop"> &#8718; </button>  
+                    <div class="playing_user_container">
+                        <div class="player_text playing"></div>
+                        <div class="player_text user"></div>
+                    </div>
                 </div>
             </div>
         </div>
+        -->
+        {{> top_body_partial}}
         <div class="main-body-container">
             <div class="nav-profile">Profile Navigator
                 <div class="sign-in">
@@ -42,26 +46,26 @@
                 <div class="viewer">
                     Main View Window
                     <div class="numbers">
-                    NUMBERS!
-                    <br>
                     <div class="entered-number"></div>
                     </div>
                 </div>  
                 <div class="enter-number">
                     <input type="text" class="enter-number-text" placeholder="Enter a number">
                     <button class="enter-number-button">Enter</button>
-                    <button class="test-button">Test</button>
+                    <!--<button class="test-button">Test</button>-->
                 </div>  
             </div>
             <div class="nav-music">Music Navigator
-                <br> Recent music links
                 <div class="recent">
+                    Recent music links
+                    <!--
                     <script>
                         setInterval("my_function();",5000); 
                         function my_function(){
                             $('#recent').load(location.href + ' #recent');
                         }
                     </script>
+                    -->
                     {{{recents}}}
                 </div>    
             </div>

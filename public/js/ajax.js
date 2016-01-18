@@ -1,5 +1,26 @@
 $(document).ready(function() {
-  
+
+  // update recents
+  /*
+  window.onload=function(){
+        setInterval("my_function();",5000); 
+        function my_function(){
+            
+            $.ajax({url: '/update_recents',
+                data: {},
+                type: 'GET',
+                success: function(data) {
+                    $('.recent').empty();
+                    $('.recent').append(data);
+                },
+                error: function(xhr, status, error) {
+                    console.log("Uh oh there was an error: " + error);
+                }
+                });
+                
+        }
+  };*/
+ 
   
   $(".test-button").click(function() {
 
@@ -33,11 +54,12 @@ $(document).ready(function() {
       type: 'POST',
       success: function(data) {
         if (data === "sign in successfully.") {
-          $(".sign-in").replaceWith("<h2> Welcome " + entered_username + " </h2>");
+          $(".sign-in").replaceWith("<h2> Welcome " + '<div class="username">'+ entered_username+'</div>' + " </h2>");
           $(".sign-up").replaceWith("<div class='sign-out'>" + " <button class='sign-out-button'>Sign Out</button>" + "</div>");
         }
       },
       error: function() {
+          console.log("sign in error");
       }
     });
   });

@@ -16,13 +16,13 @@ body {
 }
 .logo-container{
     background-color: deepskyblue;
-    display: inline-block;
+    display: inline-flex;
     width: 15%;
     height: 100%;
 }
 .music-player-container {
     background-color: blue;
-    display: inline-block;
+    display: inline-flex;
     width: 85%;
     height: 100%;
     float: right;

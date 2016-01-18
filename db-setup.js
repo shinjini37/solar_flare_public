@@ -15,6 +15,7 @@ mongo.connect(dbConnectionUrl, function (err, db) {
   collections.people = db.collection('people');
   collections.current = db.collection('current');
   collections.recentnums = db.collection('recentnums');
+  collections.usernums = db.collection('usernums');
   
 });
 

@@ -13,15 +13,7 @@ $(document).ready(function(){
     path + "E5.mp3",
     ];
     
-    var timeouts = [];
-    var pie =  '31415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679';
-    var current = pie;
-    var paused = false;
     
-    var current_paused = current;
-    var curr_index = 0;
-    
-        
     var convert = function(notestoplay_string){
         var notestoplay_music = [];
         for (var i = 0; i< notestoplay_string.length; i++){
@@ -33,38 +25,68 @@ $(document).ready(function(){
         return notestoplay_music;        
     }
     
-    var play_num = function(notestoplay_string){
-        console.log("in play_num");
-        var notestoplay_music = convert(notestoplay_string);
+    var play_music = function(music){
         var notestoplay_i = 0; 
 
-        for (var i = 0; i< notestoplay_string.length; i++){
-            if (!(i === notestoplay_music.length-1)){
+        for (var i = 0; i< music.length; i++){
+            if (!(i === music.length-1)){
                 timeouts.push(setTimeout( function() {
-                    notestoplay_music[notestoplay_i].play();
-                    curr_index = notestoplay_i;
+                    music[notestoplay_i].play();
+                    curr_index += 1;
                     notestoplay_i++;
                     }, i*300));
             } else {
                 timeouts.push(setTimeout( function() {
-                    notestoplay_music[notestoplay_i].play({
+                    music[notestoplay_i].play({
                         onfinish: function(){
                             paused = false;
                             curr_index = 0;
                             current_paused = current;
                     }});
-                    curr_index = notestoplay_i;
+                    
+                    curr_index += 1;
                     notestoplay_i++;
                     }, i*300));
             }
         }
     }
+    
+    var play_num = function(notestoplay_string){
+        console.log("in play_num");
+        var notestoplay_music = convert(notestoplay_string);
+        play_music(notestoplay_music);
+    }
 
+    var update_music_info = function(username, num){
+        // show entered number
+        var num_display_lim = 100;
+        if(num.length>num_display_lim){
+            $(".entered-number").text(num.slice(0, num_display_lim) + '...');    
+        } else {
+            $(".entered-number").text(num);    
+        }
+
+        // update musicplayer display
+        var musicplayer_lim = 25;
+        if(num.length>musicplayer_lim){
+            $(".playing").text(num.slice(0, musicplayer_lim) + '...');    
+        } else {
+            $(".playing").text(num);    
+        }
+        $(".user").text(" by " + username);
+    };
+    
+    var timeouts = [];
+    var pie =  '31415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679';
+    var current = pie;
+    var paused = false;
+    var curr_index = 0;
+    var current_music;
     
     soundManager.setup({
         url: '/soundmanager2/sfw',
         onready: function() {
-            console.log("player ready!");
+            current_music = convert(pie);
 
             $(".enter-number-button").click(function() {
 
@@ -74,8 +96,7 @@ $(document).ready(function(){
                 $.ajax({
                     url: '/enter_number',
                     data: {
-                        'username': 'anon',
-                        'num': number_entered,
+                        'num': number_entered
                     },
                     type: 'POST',
                     success: function(data) {
@@ -83,10 +104,14 @@ $(document).ready(function(){
                         // clear text
                         $(".enter-number-text").val("");
                         
-                        // show entered number
-                        $(".entered-number").text(data);
-                        current = data;
-                        play_num(data);
+                        //update current number
+                        current = number_entered;
+                        curr_index = 0;
+                        
+                        update_music_info(data, number_entered);
+                        
+                        // play the number
+                        play_num(number_entered);        
                         
                     },
                     error: function(xhr, status, error) {
@@ -98,17 +123,20 @@ $(document).ready(function(){
             
             $(".play").click(function(){
                 if (paused === false){
-                    current_paused = current;
-                    play_num(current);
+                    //current_paused = current;
+                    //play_num(current);
+                    play_music(current_music);
                 } else {
-                    current_paused = current_paused.slice(curr_index+1); 
-                    play_num(current_paused);
+                    //current_paused = current_paused.slice(curr_index+1); 
+                    //play_num(current_paused);
+                    play_music(current_music.slice(curr_index));
                     //soundManager.resumeAll();
                 }
                 
             });
             $(".stop").click(function(){
                 paused = false;
+                curr_index = 0;
                 for (var i = 0; i < timeouts.length; i++) {
                     clearTimeout(timeouts[i]);
                 }
@@ -127,6 +155,17 @@ $(document).ready(function(){
                 //quick reset of the timer array you just cleared
                 timeouts = [];
                 //soundManager.pauseAll();
+            });
+            
+              
+            $(".play_recent").on('click', function(){
+                var num = $(this).data('num').toString();
+                var username = $(this).data('username');
+                update_music_info(username, num);
+                current = num;
+                curr_index = 0;
+                        
+                play_num(num);
             });
 
         },
