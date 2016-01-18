@@ -26,29 +26,29 @@ router.get('/', function (req, res, next) {
         var recentsasstring = '';
         
         db.recentnums.find({}).toArray(function(err, list){
-                if (list.length>0){
-                        var recents = list[0]['recents'];
-                        var limit;
-                        if (recents.length>10){
-                            limit = 10;
-                        } else {
-                            limit = recents.length;
-                        }          
-                        for (var i = 0; i<limit; i++){
-                            var j = (recents.length - 1) - i;
-                            var user_profile = '<a href="./profile/' + recents[j].name + '">' + recents[j].name + '</a>';
-                            var user_number = recents[j].num;
-                            var user_number_short = user_number;
-                            if (user_number.length>5){
-                                user_number_short = user_number.slice(0,5) + '...';
-                            }
-                            var user_number_play = '<div class="play_recent" style="display:inline-block" data-username='+recents[j].name+' data-num='+user_number+'>' + user_number_short +'</div>';//+ '<input type="text" class="hidden" style="display:none" value='+user_number+'></input></div>';
-                            
-                            recentsasstring = recentsasstring + ' <br> ' + user_profile + ' played ' + user_number_play;
-                        }
+            if (list.length>0){
+                var recents = list[0]['recents'];
+                var limit;
+                if (recents.length>10){
+                    limit = 20;
+                } else {
+                    limit = recents.length;
+                }          
+                for (var i = 0; i<limit; i++){
+                    var j = (recents.length - 1) - i;
+                    var user_profile = '<a href="./profile/' + recents[j].name + '">' + recents[j].name + '</a>';
+                    var user_number = recents[j].num;
+                    var user_number_short = user_number;
+                    if (user_number.length>5){
+                        user_number_short = user_number.slice(0,5) + '...';
+                    }
+                    var user_number_play = '<div class="play_recent" style="display:inline-block" data-username='+recents[j].name+' data-num='+user_number+'>' + user_number_short +'</div>';//+ '<input type="text" class="hidden" style="display:none" value='+user_number+'></input></div>';
+                    
+                    recentsasstring = recentsasstring + ' <br> ' + user_profile + ' played ' + user_number_play;
                 }
-      // Rendering the index view with the title 'Sign Up'
-      res.render('index', { title: 'Numbers', recents: recentsasstring});
+            }
+            // Rendering the index view with the title 'Sign Up'
+            res.render('index', { title: 'Numbers', recents: recentsasstring});
 
           
       });
@@ -126,16 +126,18 @@ router.post('/enter_number', function (req, res, next) {
             db.recentnums.insert({_id: "recents", recents:[]});
             db.recentnums.update({_id: "recents"}, { $push: {recents:{name: username, num:userNum}}});
         }
+        
+        
+        db.usernums.find({username: username}).toArray(function (err, list){
+            if (list.length>0){
+                db.usernums.update({username: username}, { $push: {recents:{num:userNum}}});
+            } else { // if recentnums is empty, make an empty array and populate it
+                db.usernums.insert({username: username, recents:[]});
+                db.usernums.update({username: username}, { $push: {recents:{num:userNum}}});
+            }
+        });
     });
     
-    db.usernums.find({}).toArray(function (err, list){
-        if (list.length>0){
-            db.usernums.update({username: username}, { $push: {recents:{num:userNum}}});
-        } else { // if recentnums is empty, make an empty array and populate it
-            db.usernums.insert({username: username, recents:[]});
-            db.usernums.update({username: username}, { $push: {recents:{num:userNum}}});
-        }
-    });
     // send back the number entered
     res.send(username);
 });
