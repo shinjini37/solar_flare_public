@@ -54,8 +54,9 @@ $(document).ready(function() {
       type: 'POST',
       success: function(data) {
         if (data === "sign in successfully.") {
-          $(".sign-in").replaceWith("<h2> Welcome " + '<div class="username">'+ entered_username+'</div>' + " </h2>");
-          $(".sign-up").replaceWith("<div class='sign-out'>" + " <button class='sign-out-button'>Sign Out</button>" + "</div>");
+          // $(".sign-in").replaceWith("<h2> Welcome " + '<div class="username">'+ entered_username+'</div>' + " </h2>");
+          // $(".sign-up").replaceWith("<div class='sign-out'>" + " <button class='sign-out-button'>Sign Out</button>" + "</div>");
+          location.reload();
         }
       },
       error: function() {
