@@ -52,12 +52,20 @@ router.get('/', function (req, res, next) {
                 console.log('logged in');
                 var welcome = "<h2> Welcome " + '<div class="username">'+ sess.username +'</div>' + " </h2>";
                 var signout = "<div class='sign-out'>" + " <button class='sign-out-button'>Sign Out</button>" + "</div>";
-                res.render('index', {title: 'Numbers', recents: recentsasstring, welcome: welcome, login: signout});
+                res.render('index', {title: 'Numbers', recents: recentsasstring, welcome: welcome, login: signout, signin: '', signup: ''});
             } else {
                 console.log('not logged in');
                 // Rendering the index view with the title 'Sign Up'
-                var signin = '';
-                res.render('index', { title: 'Numbers', recents: recentsasstring, welcome:'', login:''});
+                var welcome = "<h2> Welcome " + '<div class="username">'+ "guest" +'</div>' + " </h2>";
+                var signin = "<div class='sign-in'>" +
+                        "<input type='text' class='username' placeholder='username'> <br>" +
+                        "<input type='text' class='password' placeholder='password'> <br>" +
+                        "<button class='sign-in-button'>Sign In</button>" +
+                    "</div>";
+                var signup = "<div class='sign-up'>" +
+                        "<button class='sign-up-button'>Sign Up</button>" +
+                    "</div>";
+                res.render('index', { title: 'Numbers', recents: recentsasstring, welcome: welcome, login:'', signin: signin, signup: signup});
             }
           
       });
