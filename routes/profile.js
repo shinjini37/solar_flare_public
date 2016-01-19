@@ -6,9 +6,23 @@ var db = require('../db-setup.js');
 
 var sess;
 
+var pie = '31415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679';
+
 /* GET home page. */
 router.get('/:username', function (req, res, next) {
         sess = req.session;
+        
+        if (!sess.curr){
+            sess.curr = pie;    
+        }
+        if (!sess.username){
+            sess.username = 'anon';
+        }
+        if (!sess.curr_player){
+            sess.curr_player = 'anon';
+        }
+        
+        
         var username = req.params.username;
           // showing recent numbers on number navigation
       
@@ -68,5 +82,7 @@ router.get('/:username', function (req, res, next) {
             }
     });
 });
+
+
 
 module.exports = router;

@@ -7,6 +7,9 @@ var db = require('../db-setup.js');
 // username <--bad implementation, need to convert to session variable
 var sess;
 
+
+
+
 var pie = '31415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679';
 
 /* GET home page. */
@@ -137,6 +140,8 @@ router.get('/get_current', function (req, res, next) {
     res.send({num:sess.curr, curr_player: sess.curr_player});
        
 });
+
+
 
 
 /* POST to enter_number */

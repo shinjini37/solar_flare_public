@@ -12,7 +12,23 @@ $(document).ready(function(){
     path + "D5.mp3",
     path + "E5.mp3",
     ];
+
+/*    
+    //get music paths
     
+     $.ajax({
+        url: '/get_musicpaths',
+        data: {},
+        type: 'GET',
+        success: function(data) {
+           sounds = data['sounds'];
+        },
+        error: function(xhr, status, error) {
+            console.log("Uh oh there was an error: " + error);
+        }
+
+    });
+*/    
     
     var convert = function(notestoplay_string){
         var notestoplay_music = [];
