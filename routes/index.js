@@ -57,14 +57,22 @@ router.get('/', function (req, res, next) {
             //if logged in, show logged in
             if(!(typeof (sess.username) === 'undefined') && !(sess.username==='anon')){
                 console.log('logged in');
-                var welcome = "<h2> Welcome " + '<div class="username">'+ sess.username +'</div>' + " </h2>";
+                var welcome = "<h2> Welcome " + '<div class="welcome">'+ sess.username +'</div>' + " </h2>";
                 var signout = "<div class='sign-out'>" + " <button class='sign-out-button'>Sign Out</button>" + "</div>";
-                res.render('index', {title: 'Numbers', recents: recentsasstring, welcome: welcome, login: signout});
+                res.render('index', {title: 'Numbers', recents: recentsasstring, welcome: welcome, login: signout, signin: '', signup: ''});
             } else {
                 console.log('not logged in');
                 // Rendering the index view with the title 'Sign Up'
-                var signin = '';
-                res.render('index', { title: 'Numbers', recents: recentsasstring, welcome:'', login:''});
+                var welcome2 = "<h2> Welcome " + '<div class="welcome">'+ "guest" +'</div>' + " </h2>";
+                var signin = "<div class='sign-in'>" +
+                        "<input type='text' class='username' placeholder='username'> <br>" +
+                        "<input type='text' class='password' placeholder='password'> <br>" +
+                        "<button class='sign-in-button'>Sign In</button>" +
+                    "</div>";
+                var signup = "<div class='sign-up'>" +
+                        "<button class='sign-up-button'>Sign Up</button>" +
+                    "</div>";
+                res.render('index', { title: 'Numbers', recents: recentsasstring, welcome: welcome2, login:'', signin: signin, signup: signup});
             }
           
       });
@@ -209,11 +217,11 @@ router.post('/signup', function (req, res, next) {
 router.post('/signout', function (req, res, next) {
     req.session.destroy(function(err){
         if(err){
-        console.log(err);
+            console.log(err);
         }
         else
         {
-        console.log('loggingout');    
+            console.log('loggingout');    
         res.redirect('/');
     }
 });
