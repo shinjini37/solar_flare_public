@@ -18,6 +18,13 @@ router.get('/', function (req, res, next) {
         if (!sess.curr){
             sess.curr = pie;    
         }
+        if (!sess.username){
+            sess.username = 'anon';
+        }
+        if (!sess.curr_player){
+            sess.curr_player = 'anon';
+        }
+        
         
         // showing recent numbers on number navigation
       
@@ -62,24 +69,23 @@ router.get('/', function (req, res, next) {
           
       });
       
-            
-            
-        // Changing current number to play to pi
-        /*
-        db.current.find({}).toArray(function (err, currentval) {
-            if (!(currentval.length>0)){
-                db.current.update({_id: 'current'}, {$set: {'current': pie}}); // this is buggy, if another user refreshes,
-                                                    // everyone's current goes to pie. 
-            } 
-        });
-        */
 });
-
+/*
 router.get('/recent_play', function(req, res, next){
-   var num = req.params.num;
-   res.send(num);
+    sess = req.session;
+    var num = req.params.num;
+    sess.curr = num;
+    res.send(num);
 });
+*/
 
+// update the playing info when a recent number is played
+router.post('/update_playing', function(req, res, next){
+    sess=req.session;
+    sess.curr = req.body.current;
+    sess.curr_player = req.body.player;    
+    res.send({});
+});
 /*for updating recents*/
 /*
 router.get('/update_recents', function(req, res, next){
@@ -117,6 +123,14 @@ router.get('/play', function (req, res, next) {
 });
 */
 
+/* GET current user and number*/
+router.get('/get_current', function (req, res, next) {
+    sess=req.session;
+    res.send({num:sess.curr, curr_player: sess.curr_player});
+       
+});
+
+
 /* POST to enter_number */
 router.post('/enter_number', function (req, res, next) {
     sess=req.session;
@@ -127,6 +141,7 @@ router.post('/enter_number', function (req, res, next) {
     // update current number
     
     sess.curr = userNum;
+    sess.curr_player = sess.username;
     //db.current.update({_id: 'current'}, {$set: {'current': userNum}});
     
 	// Adding the new entry to the db

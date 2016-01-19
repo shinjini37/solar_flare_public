@@ -79,19 +79,43 @@ $(document).ready(function(){
     var timeouts = [];
     var pie =  '31415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679';
     var current = pie;
+    var user_playing = 'anon';
     var paused = false;
     var curr_index = 0;
-    var current_music;
+    var current_music = [];
+
+
+    //get current number and refresh player data
     
+     $.ajax({
+        url: '/get_current',
+        data: {},
+        type: 'GET',
+        success: function(data) {
+           current = data['num'];
+           user_playing = data['curr_player'];
+           update_music_info(user_playing, current); 
+           
+        },
+        error: function(xhr, status, error) {
+            console.log("Uh oh there was an error: " + error);
+        }
+
+    });
+
+    // soundmanager setup    
     soundManager.setup({
         url: '/soundmanager2/sfw',
         onready: function() {
-            current_music = convert(pie);
+
 
             $(".enter-number-button").click(function() {
 
                 // get the number
                 var number_entered = $(".enter-number-text").val();
+                
+                // turn string into just number TODO!
+                
                 // send the AJAX request
                 $.ajax({
                     url: '/enter_number',
@@ -122,6 +146,9 @@ $(document).ready(function(){
             });
             
             $(".play").click(function(){
+                if (!(current_music.length>0)){
+                    current_music = convert(pie);
+                }
                 if (paused === false){
                     //current_paused = current;
                     //play_num(current);
@@ -161,11 +188,23 @@ $(document).ready(function(){
             $(".play_recent").on('click', function(){
                 var num = $(this).data('num').toString();
                 var username = $(this).data('username');
-                update_music_info(username, num);
-                current = num;
-                curr_index = 0;
-                        
-                play_num(num);
+                $.ajax({
+                    url: '/update_playing',
+                    data: {current: num, player: username},
+                    type: 'POST',
+                    success: function(data) {
+                        update_music_info(username, num);
+                        current = num;
+                        curr_index = 0;
+                                
+                        play_num(num);
+                    },
+                    error: function(xhr, status, error) {
+                        console.log("Uh oh there was an error: " + error);
+                    }
+
+                });
+                
             });
 
         },
