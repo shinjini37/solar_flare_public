@@ -33,13 +33,19 @@
         {{> top_body_partial}}
         <div class="main-body-container">
             <div class="nav-profile">Profile Navigator
-                <div class="sign-in">
-                    <input type="text" class="username" placeholder="username"> <br>
-                    <input type="text" class="password" placeholder="password"> <br>
-                    <button class="sign-in-button">Sign In</button>
-                </div>
-                <div class="sign-up">
-                    <button class="sign-up-button">Sign Up</button>
+                <br>
+                {{{welcome}}}
+                {{{login}}}
+                <br>
+                <div class="login-stuff">
+                    <div class="sign-in">
+                        <input type="text" class="username" placeholder="username"> <br>
+                        <input type="text" class="password" placeholder="password"> <br>
+                        <button class="sign-in-button">Sign In</button>
+                    </div>
+                    <div class="sign-up">
+                        <button class="sign-up-button">Sign Up</button>
+                    </div>
                 </div>
             </div>
             <div class="main-view">

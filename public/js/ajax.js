@@ -85,11 +85,25 @@ $(document).ready(function() {
     });
   });
 
-  $(".sign-out-button").click(function() {
+
+  $(".login-stuff").on('click', '.sign-out-button', function(){
+    $.ajax({
+      url: '/signout',
+      data: {},
+      type: 'POST',
+      success: function(data) {
+        location.reload();
+      },
+      error: function() {
+      }
+    });  
+  });
+  /*
+  $(".sign-out-button").on('click',function() {
     console.log("feeee");
     location.reload();
   });
-  
+  */
   
 
   /*

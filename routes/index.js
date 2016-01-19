@@ -5,8 +5,6 @@ var router = express.Router();
 var db = require('../db-setup.js');
 
 // username <--bad implementation, need to convert to session variable
-var username = 'anon';
-
 var sess;
 
 var pie = '31415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679';
@@ -14,14 +12,14 @@ var pie = '314159265358979323846264338327950288419716939937510582097494459230781
 /* GET home page. */
 router.get('/', function (req, res, next) {
 
-  // Session Variables
-  sess=req.session;
-  // Current number
-  if (!sess.curr){
-    sess.curr = pie;    
-  }
-  
-  // showing recent numbers on number navigation
+        // Session Variables
+        sess=req.session;
+        // Current number
+        if (!sess.curr){
+            sess.curr = pie;    
+        }
+        
+        // showing recent numbers on number navigation
       
         var recentsasstring = '';
         
@@ -47,23 +45,34 @@ router.get('/', function (req, res, next) {
                     recentsasstring = recentsasstring + ' <br> ' + user_profile + ' played ' + user_number_play;
                 }
             }
-            // Rendering the index view with the title 'Sign Up'
-            res.render('index', { title: 'Numbers', recents: recentsasstring});
-
+            console.log("username");
+            console.log(sess.username);
+            //if logged in, show logged in
+            if(!(typeof (sess.username) === 'undefined') && !(sess.username==='anon')){
+                console.log('logged in');
+                var welcome = "<h2> Welcome " + '<div class="username">'+ sess.username +'</div>' + " </h2>";
+                var signout = "<div class='sign-out'>" + " <button class='sign-out-button'>Sign Out</button>" + "</div>";
+                res.render('index', {title: 'Numbers', recents: recentsasstring, welcome: welcome, login: signout});
+            } else {
+                console.log('not logged in');
+                // Rendering the index view with the title 'Sign Up'
+                var signin = '';
+                res.render('index', { title: 'Numbers', recents: recentsasstring, welcome:'', login:''});
+            }
           
       });
       
-    
-    
-  // Changing current number to play to pi
-  /*
-  db.current.find({}).toArray(function (err, currentval) {
-      if (!(currentval.length>0)){
-          db.current.update({_id: 'current'}, {$set: {'current': pie}}); // this is buggy, if another user refreshes,
-                                              // everyone's current goes to pie. 
-      } 
-  });
-  */
+            
+            
+        // Changing current number to play to pi
+        /*
+        db.current.find({}).toArray(function (err, currentval) {
+            if (!(currentval.length>0)){
+                db.current.update({_id: 'current'}, {$set: {'current': pie}}); // this is buggy, if another user refreshes,
+                                                    // everyone's current goes to pie. 
+            } 
+        });
+        */
 });
 
 router.get('/recent_play', function(req, res, next){
@@ -95,6 +104,7 @@ router.get('/test', function (req, res, next) {
 });
 
 /* GET play usernumber*/
+/*
 router.get('/play', function (req, res, next) {
     sess=req.session;
     res.send(sess.curr);
@@ -103,57 +113,57 @@ router.get('/play', function (req, res, next) {
         var curr = list[0]['current'];
         res.send(curr); 
     })
-    */
+    
 });
-
+*/
 
 /* POST to enter_number */
 router.post('/enter_number', function (req, res, next) {
+    sess=req.session;
 
 	// Catching variables passed in the form
 	var userNum = req.body.num;
     
     // update current number
-    sess=req.session;
+    
     sess.curr = userNum;
     //db.current.update({_id: 'current'}, {$set: {'current': userNum}});
     
 	// Adding the new entry to the db
     db.recentnums.find({}).toArray(function (err, list){
         if (list.length>0){
-            db.recentnums.update({_id: "recents"}, { $push: {recents:{name: username, num:userNum}}});
+            db.recentnums.update({_id: "recents"}, { $push: {recents:{name: sess.username, num:userNum}}});
         } else { // if recentnums is empty, make an empty array and populate it
             db.recentnums.insert({_id: "recents", recents:[]});
-            db.recentnums.update({_id: "recents"}, { $push: {recents:{name: username, num:userNum}}});
+            db.recentnums.update({_id: "recents"}, { $push: {recents:{name: sess.username, num:userNum}}});
         }
         
         
-        db.usernums.find({username: username}).toArray(function (err, list){
+        db.usernums.find({username: sess.username}).toArray(function (err, list){
             if (list.length>0){
-                db.usernums.update({username: username}, { $push: {recents:{num:userNum}}});
+                db.usernums.update({username: sess.username}, { $push: {recents:{num:userNum}}});
             } else { // if recentnums is empty, make an empty array and populate it
-                db.usernums.insert({username: username, recents:[]});
-                db.usernums.update({username: username}, { $push: {recents:{num:userNum}}});
+                db.usernums.insert({username: sess.username, recents:[]});
+                db.usernums.update({username: sess.username}, { $push: {recents:{num:userNum}}});
             }
         });
     });
     
     // send back the number entered
-    res.send(username);
+    res.send(sess.username);
 });
 
 router.post('/signin', function (req, res, next) {
+  sess=req.session;
   var userName = req.body.username;
   var password = req.body.password;
-  console.log("120:");
-  console.log(userName);
-  console.log(password);
+  
 
   db.people.find({'username': userName}).toArray(function(err, list) {
     console.log(list);
     if (list.length>0){
       if (password === list[0]['password']) {
-        username = userName;
+        sess.username = userName;
         res.send("sign in successfully.");
       } else {
         res.send("wrong password.");
@@ -175,7 +185,6 @@ router.post('/signup', function (req, res, next) {
       res.send("username already exists.");
     } else { 
       db.people.insert({'username': userName, 'password': password});
-      username = userName;
       res.send("sign up successfully.");
     }
   });
@@ -183,8 +192,19 @@ router.post('/signup', function (req, res, next) {
 });
 
 router.post('/signout', function (req, res, next) {
-  username = 'anon';
-  res.send("ok");
+    req.session.destroy(function(err){
+        if(err){
+        console.log(err);
+        }
+        else
+        {
+        console.log('loggingout');    
+        res.redirect('/');
+    }
+});
+
+
+
 });
 
 module.exports = router;
