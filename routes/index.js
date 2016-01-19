@@ -69,7 +69,7 @@ router.get('/', function (req, res, next) {
                 var welcome2 = "<h2> Welcome " + '<div class="welcome">'+ "guest" +'</div>' + " </h2>";
                 var signin = "<div class='sign-in'>" +
                         "<input type='text' class='username' placeholder='username'> <br>" +
-                        "<input type='text' class='password' placeholder='password'> <br>" +
+                        "<input type='password' class='password' placeholder='password'> <br>" +
                         "<button class='sign-in-button'>Sign In</button>" +
                     "</div>";
                 var signup = "<div class='sign-up'>" +
