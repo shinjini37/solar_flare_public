@@ -3,7 +3,7 @@
     position: relative;
     top: 10%;
     left: 10%;
-    background: blue;
+    /*background: blue;*/
     height: 60%;
     width: 80%;
 }
@@ -17,12 +17,12 @@
 .viewer{
     height: 60%;
     width: 100%;
-    background-color: rebeccapurple;
+    /*background-color: rebeccapurple;*/
 }
 
 .enter-number{
     height: 40%;
     width: 100%;
-    background-color: dimgrey;
+    /*background-color: dimgrey;*/
     text-align: center;
 }
