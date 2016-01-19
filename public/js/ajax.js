@@ -46,9 +46,7 @@ $(document).ready(function() {
       'username': entered_username,
       'password': entered_password
     };
-    console.log('sign in button clicked');
-    console.log(entered_username);
-    console.log(entered_password);
+
     // send the AJAX request
     $.ajax({
       url: '/signin',
@@ -57,6 +55,10 @@ $(document).ready(function() {
       success: function(data) {
         if (data === "sign in successfully.") {
           location.reload();
+        } else {
+          window.alert(data);
+          $(".username").val('');
+          $(".password").val('');
         }
       },
       error: function() {
@@ -80,6 +82,9 @@ $(document).ready(function() {
       type: 'POST',
       success: function(data) {
         console.log(data);
+        window.alert(data);
+        $(".username").val('');
+        $(".password").val('');
       },
       error: function() {
       }

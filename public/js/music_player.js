@@ -149,9 +149,24 @@ $(document).ready(function(){
                         curr_index = 0;
                         
                         update_music_info(data, number_entered);
-                        
+
                         // play the number
-                        play_num(number_entered);        
+                        play_num(number_entered);
+
+                        $.ajax({
+                            url: '/update_recent',
+                            data: null,
+                            type: 'POST',
+                            success: function(data) {
+                                $(".recent").fadeOut(800, function() {
+                                    $(".recent").html(data);
+                                });
+                                $(".recent").fadeIn().delay(2000);
+                            },
+                            error: function(xhr, status, error) {
+                                console.log("Uh oh there was an error: " + error);
+                            }
+                        });     
                         
                     },
                     error: function(xhr, status, error) {
