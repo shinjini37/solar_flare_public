@@ -1,6 +1,10 @@
 var mongo = require('mongodb').MongoClient;
 
-var dbConnectionUrl = 'mongodb://localhost:27017/test';
+//var dbConnectionUrl = 'mongodb://localhost:27017/test';
+
+var dbConnectionUrl = 'mongodb://heroku_kq8blk5n:k8fd1dh1qkcaksa4ettk9hr9sr@ds047325.mongolab.com:47325/heroku_kq8blk5n';
+
+
 
 var collections = {};
 

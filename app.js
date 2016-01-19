@@ -6,6 +6,7 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var session = require('express-session');
 
+
 var routes = require('./routes/index');
 var profile = require('./routes/profile');
 
@@ -31,8 +32,13 @@ app.use(session({secret: 'suchsecretwow'}));//,
 //    resave: false,
 //    saveUninitialized: false}));
 
+
+
+
+
 app.use('/', routes);
 app.use('/profile', profile);
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

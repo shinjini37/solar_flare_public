@@ -4,7 +4,6 @@ var router = express.Router();
 // Access to real DB
 var db = require('../db-setup.js');
 
-// username <--bad implementation, need to convert to session variable
 var sess;
 
 
