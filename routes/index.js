@@ -42,13 +42,7 @@ router.get('/', function (req, res, next) {
                     limit = recents.length;
                 }          
                 for (var i = 0; i<limit; i++){
-                    console.log(recents.length);
-                    console.log(limit);
                     var j = (recents.length - 1) - i;
-                    console.log(i);
-                    console.log(j);
-                    console.log(recents[j]);
-                    console.log(recents[j].name);
                     var user_profile = '<a href="./profile/' + recents[j].name + '">' + recents[j].name + '</a>';
                     var user_number = recents[j].num;
                     var user_number_short = user_number;
@@ -247,7 +241,7 @@ router.post('/update_recent', function (req, res, next) {
         if (list.length>0){
             var recents = list[0]['recents'];
             var limit;
-            if (recents.length>10){
+            if (recents.length>20){
                 limit = 20;
             } else {
                 limit = recents.length;
@@ -265,9 +259,6 @@ router.post('/update_recent', function (req, res, next) {
                 recentsasstring = recentsasstring + ' <br> ' + user_profile + ' played ' + user_number_play;
             }
         }
-        console.log("username");
-        console.log(sess.username);
-        console.log(recentsasstring);
         //if logged in, show logged in
         res.send(recentsasstring);
     });

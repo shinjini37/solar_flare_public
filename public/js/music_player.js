@@ -157,7 +157,7 @@ $(document).ready(function(){
 
                         $.ajax({
                             url: '/update_recent',
-                            data: null,
+                            data: {},
                             type: 'POST',
                             success: function(data) {
                                 $(".recent").fadeOut(800, function() {
