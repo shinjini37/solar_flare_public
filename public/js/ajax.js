@@ -104,6 +104,14 @@ $(document).ready(function() {
       }
     });  
   });
+
+  $(".digit").click(function () {
+    var current_number = $(".enter-number-text").val();
+    current_number += $(this).attr("name");
+    console.log($(this).attr("name"));
+    console.log(current_number);
+    $(".enter-number-text").val(current_number);
+  });
   /*
   $(".sign-out-button").on('click',function() {
     console.log("feeee");
