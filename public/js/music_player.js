@@ -149,9 +149,11 @@ $(document).ready(function(){
                         curr_index = 0;
                         
                         update_music_info(data, number_entered);
-
+                        
                         // play the number
-                        play_num(number_entered);
+                        current_music = convert(number_entered);
+                        play_music(current_music);
+                        //play_num(number_entered);
 
                         $.ajax({
                             url: '/update_recent',
@@ -216,7 +218,7 @@ $(document).ready(function(){
             });
             
               
-            $(".play_recent").on('click', function(){
+            $(".recent").on('click',".play_recent", function(){
                 var num = $(this).data('num').toString();
                 var username = $(this).data('username');
                 $.ajax({
@@ -227,8 +229,11 @@ $(document).ready(function(){
                         update_music_info(username, num);
                         current = num;
                         curr_index = 0;
+                        
+                        current_music = convert(num);
+                        play_music(current_music);
                                 
-                        play_num(num);
+                        //play_num(num);
                     },
                     error: function(xhr, status, error) {
                         console.log("Uh oh there was an error: " + error);
