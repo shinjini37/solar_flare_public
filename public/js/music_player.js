@@ -130,7 +130,9 @@ $(document).ready(function(){
                 // get the number
                 var number_entered = $(".enter-number-text").val();
                 
-                // turn string into just number TODO!
+                // take out only the number
+                number_entered = number_entered.match(/\d/g);
+                number_entered = number_entered.join("");
                 
                 // send the AJAX request
                 $.ajax({
