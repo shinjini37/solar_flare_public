@@ -235,7 +235,7 @@ router.post('/signout', function (req, res, next) {
 router.post('/update_recent', function (req, res, next) {
     // showing recent numbers on number navigation
       
-    var recentsasstring = '';
+    var recentsasstring = '<br>';
     
     db.recentnums.find({}).toArray(function(err, list){
         if (list.length>0){
@@ -256,7 +256,7 @@ router.post('/update_recent', function (req, res, next) {
                 }
                 var user_number_play = '<div class="play_recent" style="display:inline-block" data-username='+recents[j].name+' data-num='+user_number+'>' + user_number_short +'</div>';//+ '<input type="text" class="hidden" style="display:none" value='+user_number+'></input></div>';
                 
-                recentsasstring = recentsasstring + ' <br> ' + user_profile + ' played ' + user_number_play;
+                recentsasstring =  recentsasstring + ' <br> ' + user_profile + ' played ' + user_number_play;
             }
         }
         //if logged in, show logged in
