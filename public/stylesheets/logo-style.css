@@ -1,5 +1,9 @@
 .logo{
+    font-size: 2em;
+    font-weight: bold;
+    color: #ecf0f1;
+    padding: 15% 0%  0% 15%;
     position: center;
     height: 80%;
-    width: 8%;
+    width: 80%;
 }

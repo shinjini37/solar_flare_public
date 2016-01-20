@@ -3,26 +3,46 @@
     position: relative;
     top: 10%;
     left: 10%;
-    /*background: blue;*/
-    height: 60%;
+    height: 80%;
     width: 80%;
 }
 
 .entered-number{
     font-size: 2em;
-    color: whitesmoke;
+    letter-spacing: 2px;
+    text-align: center;
+    color: #2f4f4f;
+    height: 100%;
+    width: 100%;
     word-wrap: break-word; 
+    overflow: auto;
 }
 
 .viewer{
-    height: 60%;
+    height: 80%;
     width: 100%;
     /*background-color: rebeccapurple;*/
 }
 
 .enter-number{
-    height: 40%;
+    height: 20%;
     width: 100%;
     /*background-color: dimgrey;*/
     text-align: center;
+}
+
+.enter-number-button{
+    width: 14%;
+    color: #ecf0f1;
+    border: solid 1px #457D7B;
+    padding: 5px;
+    margin: auto;
+    background-color: slategray;
+}
+
+.enter-number-text{
+    width: 60%;    
+    border:  solid 1px #457D7B;
+    padding: 5px;
+    
 }

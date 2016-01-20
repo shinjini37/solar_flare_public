@@ -59,13 +59,13 @@ router.get('/', function (req, res, next) {
             //if logged in, show logged in
             if(!(typeof (sess.username) === 'undefined') && !(sess.username==='anon')){
                 console.log('logged in');
-                var welcome = "<h2> Welcome " + '<div class="welcome">'+ sess.username +'</div>' + " </h2>";
-                var signout = "<div class='sign-out-button'>" + " <button class='sign-out-button'>Sign Out</button>" + "</div>";
+                var welcome = "<h2> Welcome, " + '<div class="welcome">'+ sess.username +'!</div>' + " </h2>";
+                var signout = "<div class='sign-out'>" + " <button class='sign-out-button'>Sign Out</button>" + "</div>";
                 res.render('index', {title: 'Numbers', recents: recentsasstring, welcome: welcome, login: signout, signin: '', signup: ''});
             } else {
                 console.log('not logged in');
                 // Rendering the index view with the title 'Sign Up'
-                var welcome2 = "<h2> Welcome " + '<div class="welcome">'+ "guest" +'</div>' + " </h2>";
+                var welcome2 = "<h2> Welcome, " + '<div class="welcome">'+ "Guest!" +'</div>' + " </h2>";
                 var signin = "<div class='sign-in'>" +
                         "<input type='text' class='username' placeholder='username'> <br>" +
                         "<input type='password' class='password' placeholder='password'> <br>" +
