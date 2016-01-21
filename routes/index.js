@@ -17,6 +17,7 @@ router.get('/', function (req, res, next) {
 
         // Session Variables
         sess=req.session;
+        
         // Initialize all session variables, if not initialized
         if (!sess.curr){
             sess.curr = pie;    
@@ -42,19 +43,25 @@ router.get('/', function (req, res, next) {
                 }          
                 for (var i = 0; i<limit; i++){
                     var j = (recents.length - 1) - i;
-                    var user_profile = '<a href="./profile/' + recents[j].name + '">' + recents[j].name + '</a>';
+                    var player = recents[j].name;
+                    var user_profile = '';
+                    if (player === "anon"){
+                        user_profile = player;    
+                    } else {
+                        user_profile = '<a href="/profile/' + player + '">' + player + '</a>';
+                    }
                     var user_number = recents[j].num;
                     var user_number_short = user_number;
                     if (user_number.length>5){
                         user_number_short = user_number.slice(0,5) + '...';
                     }
-                    var user_number_play = '<div class="play_recent" style="display:inline-block" data-username='+recents[j].name+' data-num='+user_number+'>' + user_number_short +'</div>';//+ '<input type="text" class="hidden" style="display:none" value='+user_number+'></input></div>';
+                    var user_number_play = '<div class="play_recent" style="display:inline-block" data-username='+player+' data-num='+user_number+'>' + user_number_short +'</div>';//+ '<input type="text" class="hidden" style="display:none" value='+user_number+'></input></div>';
                     
                     recentsasstring = recentsasstring + ' <br> ' + user_profile + ' played ' + user_number_play;
                 }
             }
             //if logged in, show logged in
-            if(!(typeof (sess.username) === 'undefined') && !(sess.username==='anon')){
+            if(!(typeof (sess.username) == 'undefined') && !(sess.username==='anon')){
                 var welcome = "<h2> Welcome, " + '<div class="welcome">'+ sess.username +'!</div>' + " </h2>";
                 var signout = "<div class='sign-out'>" + " <button class='sign-out-button'>Sign Out</button>" + "</div>";
                 // Render index page with all the info gotten
@@ -74,6 +81,7 @@ router.get('/', function (req, res, next) {
             }
       });
 });
+
 
 // <--------------------------------index page + profile page shared code------------------------------->
 
@@ -132,8 +140,18 @@ router.get('/get_current', function (req, res, next) {
     res.send({num:sess.curr, curr_player: sess.curr_player});
 });
 
+
+router.get('/check_signedin', function(req, res, next){
+   sess=req.session;
+   if (!(typeof (sess.username) == 'undefined') && !(sess.username==='anon')){ //signed in
+       res.send(true);
+   } else {
+       res.send(false);
+   } 
+});
+
 // updating recent numbers on number navigation
-router.post('/update_recent', function (req, res, next) {
+router.post('/update_recent_numbers', function (req, res, next) {
       
     var recentsasstring = '';
     
@@ -224,6 +242,100 @@ router.post('/signout', function (req, res, next) {
 });
 
 // <------------------------------------------profile page code------------------------------------------>
+
+/* GET profile. */
+router.get('/profile/:username', function (req, res, next) {
+    var username = req.params.username;
+    db.people.find({'username': username}).toArray(function(err, list) {
+        if (list.length>0){ // only registered users get profiles
+            if (username === 'anon'){ // anon doesn't have a profile
+                res.redirect("/");
+            } else { // everyone else gets profiles
+                // Session Variables
+                sess=req.session;
+                // Initialize all session variables, if not initialized
+                if (!sess.curr){
+                    sess.curr = pie;    
+                }
+                if (!sess.username){
+                    sess.username = 'anon';
+                }
+                if (!sess.curr_player){
+                    sess.curr_player = 'anon';
+                }
+
+
+                // showing recent numbers on number navigation
+
+                var recentsasstring = '';
+                var usersasstring = '';
+
+                db.recentnums.find({}).toArray(function(err, list){
+                    if (list.length>0){
+                        var recents = list[0]['recents'];
+                        var limit;
+                        if (recents.length>10){
+                            limit = 10;
+                        } else {
+                            limit = recents.length;
+                        }          
+                        for (var i = 0; i<limit; i++){
+                            var j = (recents.length - 1) - i;
+                            var player = recents[j].name;
+                            var user_profile = '';
+                            if (player === "anon"){
+                                user_profile = player;    
+                            } else {
+                                user_profile = '<a href="/profile/' + player + '">' + player + '</a>';
+                            }
+                            var user_number = recents[j].num;
+                            var user_number_short = user_number;
+                            if (user_number.length>5){
+                                user_number_short = user_number.slice(0,5) + '...';
+                            }
+                            var user_number_play = '<div class="play_recent" style="display:inline-block" data-username='+player+' data-num='+user_number+'>' + user_number_short +'</div>';//+ '<input type="text" class="hidden" style="display:none" value='+user_number+'></input></div>';
+                            
+                            recentsasstring = recentsasstring + ' <br> ' + user_profile + ' played ' + user_number_play;
+                        }
+                    }
+                    if (sess.username === username){ // if user's own profile
+                        db.usernums.find({username:username}).toArray(function(err, list){
+                            if (list.length>0){
+                                var recents = list[0]['recents'];
+                                var limit;
+                                if (recents.length>10){
+                                    limit = 10;
+                                } else {
+                                    limit = recents.length;
+                                }          
+                                for (var i = 0; i<limit; i++){
+                                    var j = (recents.length - 1) - i;
+                                    var user_number = recents[j].num;
+                                    var user_number_short = user_number;
+                                    if (user_number.length>5){
+                                        user_number_short = user_number.slice(0,5) + '...';
+                                    }
+                                    var user_number_play = '<div class="play_recent" style="display:inline-block" data-username='+username+' data-num='+user_number+'>' + user_number_short +'</div>';//+ '<input type="text" class="hidden" style="display:none" value='+user_number+'></input></div>';
+                                    
+                                    usersasstring = usersasstring + "<br>" + user_number_play;
+                                }
+                            }
+                            // Rendering the index view with the title as the username
+                            res.render('profile', { title: username, username:username, mine: usersasstring, recents: recentsasstring});
+                        });
+                    } else { // if someone else's profile
+                        res.render('profile', { title: username, username:username, recents: recentsasstring});
+                    }
+                });
+            }
+        } else { // not registered
+            res.redirect("/");
+        }
+    });
+
+    
+});
+
 
 
 module.exports = router;

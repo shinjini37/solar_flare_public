@@ -63,7 +63,7 @@ router.get('/:username', function (req, res, next) {
                         }          
                         for (var i = 0; i<limit; i++){
                             var j = (recents.length - 1) - i;
-                            var user_profile = '<a href="./' + username + '">' + username + '</a>';
+                            var user_profile = '<a href="/profile/' + username + '">' + username + '</a>';
                             var user_number = recents[j].num;
                             var user_number_short = user_number;
                             if (user_number.length>5){

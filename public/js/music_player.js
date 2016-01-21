@@ -1,6 +1,6 @@
 $(document).ready(function(){
     // paths to the sound files to be used
-    var path = "./acoustic_grand_piano-mp3/";
+    var path = "/acoustic_grand_piano-mp3/";
     var sounds = [
     path + "C4.mp3",
     path + "D4.mp3",  
@@ -37,7 +37,7 @@ $(document).ready(function(){
                     music[notestoplay_i].play();
                     curr_index += 1;
                     notestoplay_i++;
-                    }, i*300));
+                    }, (.5+i)*300));
             } else { // on the last note, reset variables
                 timeouts.push(setTimeout( function() {
                     music[notestoplay_i].play({
@@ -45,10 +45,10 @@ $(document).ready(function(){
                             paused = false;
                             music_playing = false;
                             curr_index = 0;
-                    }});
+                        }});
                     curr_index += 1;
                     notestoplay_i++;
-                    }, i*300));
+                    }, (.5+i)*300));
             }
         }
     }
@@ -92,21 +92,49 @@ $(document).ready(function(){
     var current_music = [];
 
 
-    //get current number and refresh player data to display
-     $.ajax({
-        url: '/get_current',
+    // refresh musicplayer data to display
+    // if not signed in, it should just show pi
+    // if signed in, it shows user's history
+    $.ajax({
+        url: '/check_signedin',
         data: {},
         type: 'GET',
-        success: function(data) {
-           current = data['num'];
-           user_playing = data['curr_player'];
-           update_music_info(user_playing, current); 
-           
+        success: function(signed_in) {
+            console.log("signed in");
+            console.log(signed_in);
+            // if not signed in 
+            // show pi
+            if (!signed_in && !(current_music.length>0)){
+                $.ajax({
+                    url: '/update_playing',
+                    data: {current: pie, player: "Numbers"},
+                    type: 'POST',
+                    success: function(data) {
+                        update_music_info('Numbers', pie);
+                    },
+                    error: function(xhr, status, error) {
+                        console.log("Uh oh there was an error: " + error);
+                    }
+                });
+            } else{ // show history
+                $.ajax({
+                    url: '/get_current',
+                    data: {},
+                    type: 'GET',
+                    success: function(data) {
+                        current = data['num'];
+                        user_playing = data['curr_player'];
+                        update_music_info(user_playing, current); 
+                    },
+                    error: function(xhr, status, error) {
+                        console.log("Uh oh there was an error: " + error);
+                    }
+                });
+            }
         },
         error: function(xhr, status, error) {
             console.log("Uh oh there was an error: " + error);
         }
-
     });
 
     // soundmanager setup    
@@ -150,7 +178,7 @@ $(document).ready(function(){
 
                         // update recent in database
                         $.ajax({
-                            url: '/update_recent',
+                            url: '/update_recent_numbers',
                             data: {},
                             type: 'POST',
                             success: function(data) {
@@ -176,21 +204,34 @@ $(document).ready(function(){
             
             // when play button is clicked
             $(".play").click(function(){
-                // if no music has been selected, set to default
-                if (!(current_music.length>0)){
-                    current_music = convert(pie);
-                }
-                
-                // only play if it isn't playing already
-                if (!music_playing){
-                    music_playing = true; // in either case, music will be played
-                    // if not paused, play current music selected
-                    if (!paused){
-                        play_music(current_music);
-                    } else { // if paused, play from where it was paused
-                        play_music(current_music.slice(curr_index));
+                // if the user is not signed in, refreshing should reset the musicplayer
+                // send ajax request to check
+                $.ajax({
+                    url: '/check_signedin',
+                    data: {},
+                    type: 'GET',
+                    success: function(signed_in) {
+                        // if not signed in or no music has been selected, 
+                        // set to default
+                        if (!signed_in && !(current_music.length>0)){
+                            current_music = convert(pie);
+                        }
+                        
+                        // only play if it isn't playing already
+                        if (!music_playing){
+                            music_playing = true; // in either case, music will be played
+                            // if not paused, play current music selected
+                            if (!paused){
+                                play_music(current_music);
+                            } else { // if paused, play from where it was paused
+                                play_music(current_music.slice(curr_index));
+                            }
+                        }         
+                    },
+                    error: function(xhr, status, error) {
+                        console.log("Uh oh there was an error: " + error);
                     }
-                }
+                });
             });
 
             // when stop button is clicked
@@ -235,6 +276,21 @@ $(document).ready(function(){
                     data: {current: num, player: username},
                     type: 'POST',
                     success: function(data) {
+                        // stop all previous music
+                        // reset values
+                        paused = false;
+                        music_playing = false;
+                        curr_index = 0;
+                        
+                        // clear out all music set to be played later
+                        for (var i = 0; i < timeouts.length; i++) {
+                            clearTimeout(timeouts[i]);
+                        }
+                        //quick reset of the timer array you just cleared
+                        timeouts = [];
+                        
+                        // update playing variable
+                        music_playing = true;
                         // update displayed info
                         update_music_info(username, num);
                         current = num;
@@ -247,7 +303,6 @@ $(document).ready(function(){
                     error: function(xhr, status, error) {
                         console.log("Uh oh there was an error: " + error);
                     }
-
                 });
                 
             });
@@ -259,3 +314,5 @@ $(document).ready(function(){
         }
     }); 
 });
+
+        

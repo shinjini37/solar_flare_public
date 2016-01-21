@@ -21,23 +21,7 @@ $(document).ready(function() {
         }
   };*/
  
-  
-  $(".test-button").click(function() {
 
-    // send the AJAX request
-    $.ajax({
-      url: '/test',
-      data: {},
-      type: 'GET',
-      success: function(data) {
-        // print out data
-        console.log(data);
-      },
-      error: function(xhr, status, error) {
-        console.log("Uh oh there was an error: " + error);
-      }
-    });
-  });
 
   $(".sign-in-button").click(function() {
     var entered_username = $(".username").val();
@@ -70,25 +54,32 @@ $(document).ready(function() {
   $(".sign-up-button").click(function() {
     var entered_username = $(".username").val();
     var entered_password = $(".password").val();
-    var entered_data = {
-      'username': entered_username,
-      'password': entered_password
-    };
+    
+    if (entered_username === "anon"){
+        alert("Username cannot be anon!");
+        $(".username").val("");
+        $(".password").val("");
+    } else {    
+        var entered_data = {
+        'username': entered_username,
+        'password': entered_password
+        };
 
-    // send the AJAX request
-    $.ajax({
-      url: '/signup',
-      data: entered_data,
-      type: 'POST',
-      success: function(data) {
-        console.log(data);
-        window.alert(data);
-        $(".username").val('');
-        $(".password").val('');
-      },
-      error: function() {
-      }
-    });
+        // send the AJAX request
+        $.ajax({
+        url: '/signup',
+        data: entered_data,
+        type: 'POST',
+        success: function(data) {
+            console.log(data);
+            window.alert(data);
+            $(".username").val('');
+            $(".password").val('');
+        },
+        error: function() {
+        }
+        });
+    }
   });
 
 
