@@ -95,6 +95,20 @@ $(document).ready(function() {
       }
     });  
   });
+  
+  $(".login-stuff").on('click', '.profile-button', function(){
+    $.ajax({
+      url: '/get_username',
+      data: {},
+      type: 'GET',
+      success: function(username) {
+        window.location = "/profile/"+username;    
+      },
+      error: function() {
+      }
+    });
+      
+  });
 
   $(".digit").click(function () {
     var current_number = $(".enter-number-text").val();

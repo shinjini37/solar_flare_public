@@ -20,8 +20,7 @@ ul{
     padding: 5px;
 }
 
-
-.sign-in-button{
+.nav-profile button{
     width: 70%;
     color: #ecf0f1;
     border: solid 1px #457D7B;
@@ -30,20 +29,3 @@ ul{
     background-color: slategray;
 }
 
-.sign-up-button{
-    width: 70%;
-    color: #ecf0f1;
-    border: solid 1px #457D7B;
-    padding: 5px;
-    margin: auto;
-    background-color: slategray;
-}
-
-.sign-out-button{
-    width: 70%;
-    color: #ecf0f1;
-    border: solid 1px #457D7B;
-    padding: 5px;
-    margin: auto;
-    background-color: slategray;
-}

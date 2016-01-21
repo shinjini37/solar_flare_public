@@ -9,19 +9,26 @@
         {{> top_body_partial}}
         <div class="main-body-container">
             <div class="nav-profile">
-                {{username}}
+                {{{username}}}
             </div>
             <div class="main-view">
                 <div class="viewer">
                 </div>  
             </div>
             <div class="nav-music">
-                <div class="user_recent">
-                    {{{mine}}}
-                <div>                 
-                <div class="recent">
-                    {{{recents}}}
-                </div>    
+                {{#if user_own_profile}}
+                    <div class="recent profile-recent">
+                        {{{mine}}}
+                    </div>                 
+                    <div class="recent profile-recent">
+                        {{{recents}}}
+                    </div>   
+                {{else}}
+                    <div class="recent">
+                        {{{recents}}}
+                    </div> 
+                {{/if}}
+                
             </div>
         </div>
     </body>
