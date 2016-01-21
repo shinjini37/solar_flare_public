@@ -183,9 +183,8 @@ $(document).ready(function(){
                             type: 'POST',
                             success: function(data) {
                                 $(".recent").fadeOut(800, function() {
+                                    // changing the html to the data recieved
                                     $(".recent").html(data);
-                                    console.log($(".recent").html(data));
-                                    // uhhh, what is this doing?
                                 });
                                 $(".recent").fadeIn().delay(2000);
                             },

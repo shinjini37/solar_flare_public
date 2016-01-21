@@ -1,0 +1,11 @@
+{{#recent}}
+    {{#if anon}}
+        anon played  
+    {{else}}
+        <a href="/profile/{{player}}">{{player}}</a> played
+    {{/if}} 
+    <div class="play_recent" style="display:inline-block" data-username={{player}} data-num={{user_number}}>
+        {{user_number_short}}
+    </div>
+    <br>
+{{/recent}}

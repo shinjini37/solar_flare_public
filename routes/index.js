@@ -10,6 +10,50 @@ var sess;
 // The default number to be played
 var pie = '31415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679';
 
+// for updating the recent numbers list
+// username only for when user is viewing their own profile
+var recent_nums = function(list, upper, username){
+    var recentsasstring = '';
+    var recent = [];
+        if (list.length>0){
+                var recents = list[0]['recents'];
+                var limit;
+                if (recents.length>upper){
+                    limit = upper;
+                } else {
+                    limit = recents.length;
+                }          
+                for (var i = 0; i<limit; i++){
+                    var j = (recents.length - 1) - i;
+                    var user_profile;
+                    if (username){
+                        var player = username;
+                    } else {
+                        var player = recents[j].name;
+                    }
+                    var anon;
+                    if (player === "anon"){
+                        anon = true;
+                        user_profile = 'anon';    
+                    } else {
+                        anon = false;
+                        user_profile = '<a href="./profile/' + player + '">' + player + '</a>';
+                    }
+                    var user_number = recents[j].num;
+                    var user_number_short = user_number;
+                    if (user_number.length>5){
+                        user_number_short = user_number.slice(0,5) + '...';
+                    }
+                    var user_number_play = '<div class="play_recent" style="display:inline-block" data-username='+player+' data-num='+user_number+'>' + user_number_short +'</div>';
+                    
+                    recentsasstring =  recentsasstring + user_profile + ' played ' + user_number_play + ' <br> ';
+                    recent.push({anon: anon, player:player, user_number: user_number, user_number_short:user_number_short});
+                    
+                }
+        }
+        return {recentasstring: recentsasstring, recent: recent};
+}
+
 // <------------------------------------------index page code------------------------------------------>
 
 /* GET home page. */
@@ -30,61 +74,21 @@ router.get('/', function (req, res, next) {
         }
         
         // showing recently played numbers on number navigation
-        var recentsasstring = '';
-        
+        var recent = [];
         db.recentnums.find({}).toArray(function(err, list){
-            if (list.length>0){
-                var recents = list[0]['recents'];
-                var limit;
-                if (recents.length>20){
-                    limit = 20;
-                } else {
-                    limit = recents.length;
-                }          
-                for (var i = 0; i<limit; i++){
-                    var j = (recents.length - 1) - i;
-                    var player = recents[j].name;
-                    var user_profile = '';
-                    if (player === "anon"){
-                        user_profile = player;    
-                    } else {
-                        user_profile = '<a href="/profile/' + player + '">' + player + '</a>';
-                    }
-                    var user_number = recents[j].num;
-                    var user_number_short = user_number;
-                    if (user_number.length>5){
-                        user_number_short = user_number.slice(0,5) + '...';
-                    }
-                    var user_number_play = '<div class="play_recent" style="display:inline-block" data-username='+player+' data-num='+user_number+'>' + user_number_short +'</div>';//+ '<input type="text" class="hidden" style="display:none" value='+user_number+'></input></div>';
-                    
-                    if (i===1){
-                        recentsasstring = user_profile + ' played ' + user_number_play;
-                    } else {
-                        recentsasstring = recentsasstring + ' <br> ' + user_profile + ' played ' + user_number_play;
-                    }
-                }
-            }
+            recent = recent_nums(list, 20).recent;
+            var signed_in;
+            var username;
             //if logged in, show logged in
             if(!(typeof (sess.username) == 'undefined') && !(sess.username==='anon')){
-                var welcome = "<h2> Welcome, " + '<div class="welcome">'+ sess.username +'!</div>' + " </h2>";
-                // TODO: THIS IS A BIT HACKY RIGHT NOW! MAKE IT BETTER
-                var signout = "<div class='sign-out'>" + " <button class='profile-button'>My Profile</button>" + "</div><br><br>";
-                signout = signout+ "<div class='sign-out'>" + " <button class='sign-out-button'>Sign Out</button>" + "</div>";
-                // Render index page with all the info gotten
-                res.render('index', {title: 'Numbers', recents: recentsasstring, welcome: welcome, login: signout, signin: '', signup: ''});
+                signed_in = true;
+                username = sess.username;
             } else {//else, show anon
-                var welcome2 = "<h2> Welcome, " + '<div class="welcome">'+ "Guest!" +'</div>' + " </h2>";
-                var signin = "<div class='sign-in'>" +
-                        "<input type='text' class='username' placeholder='username'> <br>" +
-                        "<input type='password' class='password' placeholder='password'> <br>" +
-                        "<button class='sign-in-button'>Sign In</button>" +
-                    "</div>";
-                var signup = "<div class='sign-up'>" +
-                        "<button class='sign-up-button'>Sign Up</button>" +
-                    "</div>";
-                // Render index page with all the info gotten
-                res.render('index', { title: 'Numbers', recents: recentsasstring, welcome: welcome2, login:'', signin: signin, signup: signup});
+                signed_in = false;
+                username = "Guest";
             }
+            // Render index page with all the info gotten
+            res.render('index', {title: 'Numbers', recent:recent, username: username, signed_in:signed_in});
       });
 });
 
@@ -122,13 +126,11 @@ router.post('/enter_number', function (req, res, next) {
                 db.usernums.insert({username: sess.username, recents:[]});
                 db.usernums.update({username: sess.username}, { $push: {recents:{num:userNum}}});
             }
+            // send back the username
+            // do we need to?
+            res.send(sess.username);
         });
     });
-    
-    // send back the username
-    // do we need to?
-    res.send(sess.username);
-
 });
 
 
@@ -167,28 +169,7 @@ router.post('/update_recent_numbers', function (req, res, next) {
     var recentsasstring = '';
     
     db.recentnums.find({}).toArray(function(err, list){
-        if (list.length>0){
-            var recents = list[0]['recents'];
-            var limit;
-            if (recents.length>20){
-                limit = 20;
-            } else {
-                limit = recents.length;
-            }          
-            for (var i = 0; i<limit; i++){
-                var j = (recents.length - 1) - i;
-                var user_profile = '<a href="./profile/' + recents[j].name + '">' + recents[j].name + '</a>';
-                var user_number = recents[j].num;
-                var user_number_short = user_number;
-                if (user_number.length>5){
-                    user_number_short = user_number.slice(0,5) + '...';
-                }
-                var user_number_play = '<div class="play_recent" style="display:inline-block" data-username='+recents[j].name+' data-num='+user_number+'>' + user_number_short +'</div>';//+ '<input type="text" class="hidden" style="display:none" value='+user_number+'></input></div>';
-                
-                recentsasstring =  recentsasstring + ' <br> ' + user_profile + ' played ' + user_number_play;
-            }
-        }
-
+        recentsasstring = recent_nums(list, 20).recentasstring;
         res.send(recentsasstring);
     });
 });
@@ -275,88 +256,28 @@ router.get('/profile/:username', function (req, res, next) {
                     sess.curr_player = 'anon';
                 }
 
-                // Username
-                var welcome = "<h2> " + '<a href="/profile/'+username+'">'+ username +'</a>' + " </h2>";
-                
-                
                 // showing recent numbers on number navigation
 
-                var recentsasstring = '';
-                var usersasstring = '';
+                var recent = [];
+                var my_recent = [];
                 
-                if (sess.username === username){
-                    var recentnums_lim = 10;
-                    var user_own_profile = true;
-                } else {
-                    var recentnums_lim = 20;
-                    var user_own_profile = false;
-                }
-
                 db.recentnums.find({}).toArray(function(err, list){
-                    if (list.length>0){
-                        var recents = list[0]['recents'];
-                        var limit;
-                        if (recents.length>recentnums_lim){
-                            limit = recentnums_lim;
-                        } else {
-                            limit = recents.length;
-                        }          
-                        for (var i = 0; i<limit; i++){
-                            var j = (recents.length - 1) - i;
-                            var player = recents[j].name;
-                            var user_profile = '';
-                            if (player === "anon"){
-                                user_profile = player;    
-                            } else {
-                                user_profile = '<a href="/profile/' + player + '">' + player + '</a>';
-                            }
-                            var user_number = recents[j].num;
-                            var user_number_short = user_number;
-                            if (user_number.length>5){
-                                user_number_short = user_number.slice(0,5) + '...';
-                            }
-                            var user_number_play = '<div class="play_recent" style="display:inline-block" data-username='+player+' data-num='+user_number+'>' + user_number_short +'</div>';//+ '<input type="text" class="hidden" style="display:none" value='+user_number+'></input></div>';
-                            
-                            if (i===1){
-                                recentsasstring = user_profile + ' played ' + user_number_play;
-                            } else {
-                                recentsasstring = recentsasstring + ' <br> ' + user_profile + ' played ' + user_number_play;
-                            }
-                        }
-                    }
                     if (sess.username === username){ // if user's own profile
+                        var user_own_profile = true;
+                        recent = recent_nums(list, 10).recent;
+                        
                         db.usernums.find({username:username}).toArray(function(err, list){
-                            if (list.length>0){
-                                var recents = list[0]['recents'];
-                                var limit;
-                                if (recents.length>10){
-                                    limit = 10;
-                                } else {
-                                    limit = recents.length;
-                                }          
-                                for (var i = 0; i<limit; i++){
-                                    var j = (recents.length - 1) - i;
-                                    var user_number = recents[j].num;
-                                    var user_number_short = user_number;
-                                    if (user_number.length>10){
-                                        user_number_short = user_number.slice(0,10) + '...';
-                                    }
-                                    var user_number_play = '<div class="play_recent" style="display:inline-block" data-username='+username+' data-num='+user_number+'>' + user_number_short +'</div>';
-                                    
-                                    if (i===1){
-                                        usersasstring = user_number_play;
-                                    } else {
-                                        usersasstring = usersasstring + "<br>" + user_number_play;
-                                    }
-                                    
-                                }
-                            }
+                            my_recent = recent_nums(list, 10, username).recent;
                             // Rendering the index view with the title as the username
-                            res.render('profile', { title: username, username:welcome, user_own_profile:user_own_profile, mine: usersasstring, recents: recentsasstring});
+                            res.render('profile', { title: username, username:username, user_own_profile:user_own_profile, recent:recent, my_recent: my_recent});
                         });
                     } else { // if someone else's profile
-                        res.render('profile', { title: username, username:welcome, user_own_profile:user_own_profile, recents: recentsasstring});
+                        var user_own_profile = false;
+                        recent = recent_nums(list, 20).recent;
+                        // Rendering the index view with the title as the username
+                        res.render('profile', { title: username, username:username, user_own_profile:user_own_profile, recent:recent});
                     }
+                    
                 });
             }
         } else { // not registered

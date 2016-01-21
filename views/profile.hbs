@@ -9,7 +9,7 @@
         {{> top_body_partial}}
         <div class="main-body-container">
             <div class="nav-profile">
-                {{{username}}}
+                <h2><a href="/profile/'+username+'">{{username}}</a></h2>
             </div>
             <div class="main-view">
                 <div class="viewer">
@@ -18,14 +18,19 @@
             <div class="nav-music">
                 {{#if user_own_profile}}
                     <div class="recent profile-recent">
-                        {{{mine}}}
+                        {{#my_recent}}
+                            <div class="play_recent" style="display:inline-block" data-username={{player}} data-num={{user_number}}>
+                                {{user_number_short}}
+                            </div>
+                            <br>
+                        {{/my_recent}}
                     </div>                 
                     <div class="recent profile-recent">
-                        {{{recents}}}
+                        {{> recents_partial}}
                     </div>   
                 {{else}}
                     <div class="recent">
-                        {{{recents}}}
+                        {{> recents_partial}}
                     </div> 
                 {{/if}}
                 
