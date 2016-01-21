@@ -1,4 +1,5 @@
 $(document).ready(function(){
+    // paths to the sound files to be used
     var path = "./acoustic_grand_piano-mp3/";
     var sounds = [
     path + "C4.mp3",
@@ -13,23 +14,7 @@ $(document).ready(function(){
     path + "E5.mp3",
     ];
 
-/*    
-    //get music paths
-    
-     $.ajax({
-        url: '/get_musicpaths',
-        data: {},
-        type: 'GET',
-        success: function(data) {
-           sounds = data['sounds'];
-        },
-        error: function(xhr, status, error) {
-            console.log("Uh oh there was an error: " + error);
-        }
-
-    });
-*/    
-    
+    // convert a number string to an array of Soundmanager sound files
     var convert = function(notestoplay_string){
         var notestoplay_music = [];
         for (var i = 0; i< notestoplay_string.length; i++){
@@ -41,6 +26,8 @@ $(document).ready(function(){
         return notestoplay_music;        
     }
     
+    // plays the given array of sound files in sequence with an interval
+    // of 0.3 seconds
     var play_music = function(music){
         var notestoplay_i = 0; 
 
@@ -51,15 +38,14 @@ $(document).ready(function(){
                     curr_index += 1;
                     notestoplay_i++;
                     }, i*300));
-            } else {
+            } else { // on the last note, reset variables
                 timeouts.push(setTimeout( function() {
                     music[notestoplay_i].play({
                         onfinish: function(){
                             paused = false;
+                            music_playing = false;
                             curr_index = 0;
-                            current_paused = current;
                     }});
-                    
                     curr_index += 1;
                     notestoplay_i++;
                     }, i*300));
@@ -67,12 +53,14 @@ $(document).ready(function(){
         }
     }
     
+    // play numbers in a given string
     var play_num = function(notestoplay_string){
         console.log("in play_num");
         var notestoplay_music = convert(notestoplay_string);
         play_music(notestoplay_music);
     }
 
+    // update the musicplayer display number and artist
     var update_music_info = function(username, num){
         // show entered number
         var num_display_lim = 100;
@@ -92,17 +80,19 @@ $(document).ready(function(){
         $(".user").text(" by " + username);
     };
     
+    
+    // variables
     var timeouts = [];
-    var pie =  '31415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679';
+    var pie = '31415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679';
     var current = pie;
     var user_playing = 'anon';
+    var music_playing = false;
     var paused = false;
     var curr_index = 0;
     var current_music = [];
 
 
-    //get current number and refresh player data
-    
+    //get current number and refresh player data to display
      $.ajax({
         url: '/get_current',
         data: {},
@@ -124,7 +114,7 @@ $(document).ready(function(){
         url: '/soundmanager2/sfw',
         onready: function() {
 
-
+            // when a new number is entered by user
             $(".enter-number-button").click(function() {
 
                 // get the number
@@ -150,13 +140,15 @@ $(document).ready(function(){
                         current = number_entered;
                         curr_index = 0;
                         
+                        // update music display info
                         update_music_info(data, number_entered);
                         
                         // play the number
                         current_music = convert(number_entered);
                         play_music(current_music);
-                        //play_num(number_entered);
+                        music_playing = true;
 
+                        // update recent in database
                         $.ajax({
                             url: '/update_recent',
                             data: {},
@@ -164,6 +156,8 @@ $(document).ready(function(){
                             success: function(data) {
                                 $(".recent").fadeOut(800, function() {
                                     $(".recent").html(data);
+                                    console.log($(".recent").html(data));
+                                    // uhhh, what is this doing?
                                 });
                                 $(".recent").fadeIn().delay(2000);
                             },
@@ -180,62 +174,75 @@ $(document).ready(function(){
                 });
             });
             
+            // when play button is clicked
             $(".play").click(function(){
+                // if no music has been selected, set to default
                 if (!(current_music.length>0)){
                     current_music = convert(pie);
                 }
-                if (paused === false){
-                    //current_paused = current;
-                    //play_num(current);
-                    play_music(current_music);
-                } else {
-                    //current_paused = current_paused.slice(curr_index+1); 
-                    //play_num(current_paused);
-                    play_music(current_music.slice(curr_index));
-                    //soundManager.resumeAll();
-                }
                 
+                // only play if it isn't playing already
+                if (!music_playing){
+                    music_playing = true; // in either case, music will be played
+                    // if not paused, play current music selected
+                    if (!paused){
+                        play_music(current_music);
+                    } else { // if paused, play from where it was paused
+                        play_music(current_music.slice(curr_index));
+                    }
+                }
             });
+
+            // when stop button is clicked
             $(".stop").click(function(){
+                // reset values
                 paused = false;
+                music_playing = false;
                 curr_index = 0;
+                
+                // clear out all music set to be played later
                 for (var i = 0; i < timeouts.length; i++) {
                     clearTimeout(timeouts[i]);
                 }
-                
                 //quick reset of the timer array you just cleared
                 timeouts = [];
-               //soundManager.stopAll(); 
             });
             
+            // when pause button is clicked
             $(".pause").click(function(){
+                // set values
                 paused = true; 
+                music_playing = false;
+                
+                // clear out all music set to be played later
                 for (var i = 0; i < timeouts.length; i++) {
                     clearTimeout(timeouts[i]);
                 }
                 
                 //quick reset of the timer array you just cleared
                 timeouts = [];
-                //soundManager.pauseAll();
             });
             
-              
+            // when a recent number is clicked to be played              
             $(".recent").on('click',".play_recent", function(){
+                // get data to play the music
                 var num = $(this).data('num').toString();
                 var username = $(this).data('username');
+                
+                // update database session variables
                 $.ajax({
                     url: '/update_playing',
                     data: {current: num, player: username},
                     type: 'POST',
                     success: function(data) {
+                        // update displayed info
                         update_music_info(username, num);
                         current = num;
                         curr_index = 0;
                         
+                        // play music
                         current_music = convert(num);
                         play_music(current_music);
-                                
-                        //play_num(num);
                     },
                     error: function(xhr, status, error) {
                         console.log("Uh oh there was an error: " + error);
