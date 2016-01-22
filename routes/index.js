@@ -264,6 +264,14 @@ router.get('/profile/:username', function (req, res, next) {
                 var recent = [];
                 var my_recent = [];
                 
+                var signed_in;
+                //if logged in, show logged in
+                if(!(typeof (sess.username) == 'undefined') && !(sess.username==='anon')){
+                    signed_in = true;
+                } else {//else, show anon
+                    signed_in = false;
+                }
+                
                 db.recentnums.find({}).toArray(function(err, list){
                     if (sess.username === username){ // if user's own profile
                         var user_own_profile = true;
@@ -272,13 +280,13 @@ router.get('/profile/:username', function (req, res, next) {
                         db.usernums.find({username:username}).toArray(function(err, list){
                             my_recent = recent_nums(list, 10, username).recent;
                             // Rendering the index view with the title as the username
-                            res.render('profile', { title: username, username:username, user_own_profile:user_own_profile, recent:recent, my_recent: my_recent});
+                            res.render('profile', { title: username, username:username, signed_in: signed_in, user_own_profile:user_own_profile, recent:recent, my_recent: my_recent});
                         });
                     } else { // if someone else's profile
                         var user_own_profile = false;
                         recent = recent_nums(list, 5).recent;
                         // Rendering the index view with the title as the username
-                        res.render('profile', { title: username, username:username, user_own_profile:user_own_profile, recent:recent});
+                        res.render('profile', { title: username, username:username,  signed_in: signed_in, user_own_profile:user_own_profile, recent:recent});
                     }
                     
                 });
@@ -291,6 +299,35 @@ router.get('/profile/:username', function (req, res, next) {
     
 });
 
+
+router.post("/add_fav_user", function(req, res, next){
+    sess=req.session;
+
+    // Catching variables passed in the form
+    var fav_username = req.body.fav_username;
+    
+    if(!(typeof (sess.username) == 'undefined') && !(sess.username==='anon')){
+        console.log("1");
+        console.log(sess.username);
+        console.log(db.userfavusers);
+        console.log(db.userfavusers.find({username: sess.username}));
+        
+        db.userfavusers.find({username: sess.username}).toArray(function (err, list){
+            console.log("2");
+            if (list.length>0){
+                console.log("3");
+                db.userfavusers.update({username: sess.username}, { $push: {fav_users:{num:fav_username}}});
+            } else { // if recentnums is empty, make an empty array and populate it
+            console.log("2");
+                db.userfavusers.insert({username: sess.username, fav_users:[]});
+                db.userfavusers.update({username: sess.username}, { $push: {fav_users:{num:fav_username}}});
+            }
+            // send back
+            res.send("success!");
+        });
+    }
+    
+});
 
 
 module.exports = router;

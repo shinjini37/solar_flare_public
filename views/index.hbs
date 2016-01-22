@@ -35,7 +35,7 @@
                         title="Signing up has many benefits! 
                         You can save you favorite numbers, 
                         visit other users and save them as your favorites, 
-                        and show off your best creations!">Sign Up</button>
+                        and show off your best creations!">Sign Up!</button>
                     </div>
                 {{/if}}
                 </div>
@@ -57,7 +57,7 @@
                 </div>  
                 <div class="enter-number">
                     
-                    <input type="text" class="enter-number-text"  placeholder="Enter a number..." title="Enter a number here to play the music! Hint: Anything other than numbers will be ignored.">
+                    <input type="text" class="enter-number-text"  placeholder="Enter a number..." onkeypress="return event.charCode >= 48 && event.charCode <= 57" title="Enter a number here to play the music! Hint: Anything other than numbers will be ignored.">
                     <!-- onkeypress="return event.charCode >= 48 && event.charCode <= 57"-->
                     <button class="enter-number-button">Play!</button>
                     <!--
@@ -96,5 +96,31 @@
             </div>
         {{/if}}
         -->
+        <div class="nav-profile sign-up-box">
+            <table>
+                <tr>
+                    <td>Enter a username:</td>
+                    <td><input type='text' class='username signup' title="Username must be 4-20 charecters long" placeholder='username'></td> 
+                </tr>
+                <tr>
+                    <td>Enter a password:</td>
+                    <td><input type='password' class='password signup' placeholder='password'></td> 
+                </tr>
+                <tr>
+                    <td>Reenter password:</td>
+                    <td><input type='password' class='password signup verify' placeholder='reenter password'></td> 
+                </tr>
+            </table>
+            <br><br>
+            <table>
+                <tr> 
+                    <td><button class='sign-up-button signup'>Sign Up!</button> </td>
+                </tr>
+                <tr></tr>
+                <tr>
+                    <td><button class='cancel-button signup'>Cancel</button> </td>
+                </tr>
+            </table>
+        </div>
     </body>
 </html>

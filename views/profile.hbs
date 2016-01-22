@@ -9,7 +9,21 @@
         {{> top_body_partial}}
         <div class="main-body-container">
             <div class="nav-profile">
-                <h2><a href="/profile/'+username+'">{{username}}!</a></h2>
+                <div class="profile-stuff">
+                    <h2><a data-username={{username}} href="/profile/'+username+'">{{username}}!</a></h2>
+                    {{#if signed_in}}
+                        <button class="sign-out-button"> Sign Out </button>
+                        {{#if user_own_profile}}
+                            <div class="fav-users">
+                                {{#fav_user}}
+                                    <a href="/profile/'+username+'">{{fav_username}}!</a>
+                                {{/fav_user}}
+                            </div>
+                        {{else}}
+                        <button class="add-user-fav">Add {{username}} to my favorites!</button>
+                        {{/if}}
+                    {{/if}}
+                </div>
             </div>
             <div class="main-view">
                 <div class="viewer">

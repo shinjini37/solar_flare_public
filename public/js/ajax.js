@@ -51,14 +51,26 @@ $(document).ready(function() {
     });
   });
 
-  $(".sign-up-button").click(function() {
-    var entered_username = $(".username").val();
-    var entered_password = $(".password").val();
+  $(".sign-up-button").click(function(){
+     $(".sign-up-box").css("display", "block"); 
+  });
+
+  $(".sign-up-button.signup").click(function() {
+    var entered_username = $(".username.signup").val();
+    var entered_password = $(".password.signup").val();
+    var verify_password = $(".password.signup.verify").val();
     
-    if (entered_username === "anon"){
+    if (entered_username.length<4 || entered_username.length>20){
+        alert("Username is too long or too short. It must be between 4-20 charecters.");
+    } else if (entered_username === "anon"){
         alert("Username cannot be anon!");
-        $(".username").val("");
-        $(".password").val("");
+        $(".username.signup").val("");
+        $(".password.signup").val("");
+        $(".password.signup .verify").val("");
+    } else if (!(entered_password === verify_password)){
+        alert("Passwords do not match.");
+        $(".password.signup").val("");
+        $(".password.signup .verify").val("");
     } else {    
         var entered_data = {
         'username': entered_username,
@@ -81,6 +93,10 @@ $(document).ready(function() {
         }
         });
     }
+  });
+  
+  $(".cancel-button.signup").click(function(){
+      $(".sign-up-box").css("display", "none");
   });
 
 

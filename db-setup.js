@@ -20,6 +20,8 @@ mongo.connect(dbConnectionUrl, function (err, db) {
   collections.current = db.collection('current');
   collections.recentnums = db.collection('recentnums');
   collections.usernums = db.collection('usernums');
+  collections.userfavusers= db.collection('userfavusers');
+  collections.userfavnumbers= db.collection('userfavnumbers');
   
 });
 
