@@ -63,7 +63,7 @@ $(document).ready(function(){
     // update the musicplayer display number and artist
     var update_music_info = function(username, num){
         // show entered number
-        var num_display_lim = 100;
+        var num_display_lim = 200;
         if(num.length>num_display_lim){
             $(".entered-number").text(num.slice(0, num_display_lim) + '...');    
         } else {
@@ -71,7 +71,7 @@ $(document).ready(function(){
         }
 
         // update musicplayer display
-        var musicplayer_lim = 25;
+        var musicplayer_lim = 50;
         if(num.length>musicplayer_lim){
             $(".playing").text(num.slice(0, musicplayer_lim) + '...');    
         } else {
@@ -104,7 +104,7 @@ $(document).ready(function(){
             console.log(signed_in);
             // if not signed in 
             // show pi
-            if (!signed_in && !(current_music.length>0)){
+            if (!signed_in){
                 $.ajax({
                     url: '/update_playing',
                     data: {current: pie, player: "Numbers"},
@@ -182,11 +182,11 @@ $(document).ready(function(){
                             data: {},
                             type: 'POST',
                             success: function(data) {
-                                $(".recent-update").fadeOut(800, function() {
+                                $(".recent-list").fadeOut(800, function() {
                                     // changing the html to the data recieved
-                                    $(".recent-update").html(data);
+                                    $(".recent-list").html(data);
                                 });
-                                $(".recent-update").fadeIn().delay(2000);
+                                $(".recent-list").fadeIn().delay(2000);
                             },
                             error: function(xhr, status, error) {
                                 console.log("Uh oh there was an error: " + error);
@@ -212,7 +212,7 @@ $(document).ready(function(){
                     success: function(signed_in) {
                         // if not signed in or no music has been selected, 
                         // set to default
-                        if (!signed_in || !(current_music.length>0)){
+                        if (!signed_in && !(current_music.length>0)){
                             current_music = convert(pie);
                         }
                         
@@ -221,6 +221,9 @@ $(document).ready(function(){
                             music_playing = true; // in either case, music will be played
                             // if not paused, play current music selected
                             if (!paused){
+                                if (!(current_music.length>0)){
+                                    current_music = convert(current);
+                                }
                                 play_music(current_music);
                             } else { // if paused, play from where it was paused
                                 play_music(current_music.slice(curr_index));

@@ -1,16 +1,32 @@
 .recent{
-    padding: 5%;
-    word-wrap: break-word;
-    overflow: auto;
     width: 100%;
     height: 90%;
     margin-top: 10%;
-    color: #5D9B9B;
-    background-color: #2f4f4f; 
+    
 }
 
 .profile-recent{
     height: 40%;
+}
+
+
+.recents-label{
+    height: 5%;
+    width: 100%;
+    padding: 5%;
+    color: #5D9B9B;
+    background-color: #294545;
+    text-align: center;
+}
+
+.recent-list{
+    padding: 5%;
+    word-wrap: break-word;
+    overflow: auto;
+    color: #5D9B9B;
+    background-color: #2f4f4f; 
+    height: 85%;
+    width: 100%;
 }
 
 a{

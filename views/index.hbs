@@ -11,7 +11,7 @@
                 <br>
                 <!--{{{welcome}}}-->
                 <h2> Welcome, 
-                    <div class="welcome">{{username}}</div>
+                    <div class="welcome">{{username}}!</div>
                 </h2>
                 <br>
                 <div class="login-stuff">
@@ -64,10 +64,8 @@
             </div>
             <div class="nav-music">
                 <div class="recent">
-                    <div> Recent Numbers </div>
-                    <div class="recent-update">
-                        {{> recents_partial }}
-                    </div>
+                    <div class="recents-label"> Recent Numbers </div>
+                    {{> recents_partial }}
                 </div>    
             </div>
         </div>

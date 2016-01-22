@@ -9,7 +9,7 @@
         {{> top_body_partial}}
         <div class="main-body-container">
             <div class="nav-profile">
-                <h2><a href="/profile/'+username+'">{{username}}</a></h2>
+                <h2><a href="/profile/'+username+'">{{username}}!</a></h2>
             </div>
             <div class="main-view">
                 <div class="viewer">
@@ -18,21 +18,23 @@
             <div class="nav-music">
                 {{#if user_own_profile}}
                     <div class="recent profile-recent">
-                        <div> My Numbers </div>
-                        {{#my_recent}}
-                            <div class="play_recent" style="display:inline-block" data-username={{player}} data-num={{user_number}}>
-                                {{user_number_short}}
-                            </div>
-                            <br>
-                        {{/my_recent}}
+                        <div class="recents-label"> My Numbers </div>
+                        <div class="recent-list">
+                            {{#my_recent}}
+                                <div class="play_recent" style="display:inline-block" data-username={{player}} data-num={{user_number}}>
+                                    {{user_number_short}}
+                                </div>
+                                <br>
+                            {{/my_recent}}
+                        </div>
                     </div>
                     <div class="recent profile-recent">
-                        <div> Recent Numbers </div>
+                        <div class="recents-label"> Recent Numbers </div>
                         {{> recents_partial}}
                     </div>   
                 {{else}}
                     <div class="recent">
-                        <div> Recent Numbers </div>
+                        <div class="recents-label"> Recent Numbers </div>
                         {{> recents_partial}}
                     </div> 
                 {{/if}}
