@@ -12,7 +12,7 @@ var pie = '314159265358979323846264338327950288419716939937510582097494459230781
 
 // for updating the recent numbers list
 // username only for when user is viewing their own profile
-var recent_nums = function(list, upper, username){
+var recent_nums = function(list, upper, len, username){
     var recentsasstring = '';
     var recent = [];
         if (list.length>0){
@@ -41,8 +41,8 @@ var recent_nums = function(list, upper, username){
                     }
                     var user_number = recents[j].num;
                     var user_number_short = user_number;
-                    if (user_number.length>5){
-                        user_number_short = user_number.slice(0,5) + '...';
+                    if (user_number.length>len){
+                        user_number_short = user_number.slice(0,len) + '...';
                     }
                     var user_number_play = '<div class="play_recent" style="display:inline-block" data-username='+player+' data-num='+user_number+'>' + user_number_short +'</div>';
                     
@@ -76,7 +76,7 @@ router.get('/', function (req, res, next) {
         // showing recently played numbers on number navigation
         var recent = [];
         db.recentnums.find({}).toArray(function(err, list){
-            recent = recent_nums(list, 20).recent;
+            recent = recent_nums(list, 20, 5).recent;
             var signed_in;
             var username;
             //if logged in, show logged in
@@ -169,7 +169,7 @@ router.post('/update_recent_numbers', function (req, res, next) {
     var recentsasstring = '';
     
     db.recentnums.find({}).toArray(function(err, list){
-        recentsasstring = recent_nums(list, 20).recentasstring;
+        recentsasstring = recent_nums(list, 20, 5).recentasstring;
         res.send(recentsasstring);
     });
 });
@@ -264,16 +264,16 @@ router.get('/profile/:username', function (req, res, next) {
                 db.recentnums.find({}).toArray(function(err, list){
                     if (sess.username === username){ // if user's own profile
                         var user_own_profile = true;
-                        recent = recent_nums(list, 10).recent;
+                        recent = recent_nums(list, 10, 5).recent;
                         
                         db.usernums.find({username:username}).toArray(function(err, list){
-                            my_recent = recent_nums(list, 10, username).recent;
+                            my_recent = recent_nums(list, 10, 10, username).recent;
                             // Rendering the index view with the title as the username
                             res.render('profile', { title: username, username:username, user_own_profile:user_own_profile, recent:recent, my_recent: my_recent});
                         });
                     } else { // if someone else's profile
                         var user_own_profile = false;
-                        recent = recent_nums(list, 20).recent;
+                        recent = recent_nums(list, 20, 5).recent;
                         // Rendering the index view with the title as the username
                         res.render('profile', { title: username, username:username, user_own_profile:user_own_profile, recent:recent});
                     }

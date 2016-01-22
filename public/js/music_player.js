@@ -182,11 +182,11 @@ $(document).ready(function(){
                             data: {},
                             type: 'POST',
                             success: function(data) {
-                                $(".recent").fadeOut(800, function() {
+                                $(".recent-update").fadeOut(800, function() {
                                     // changing the html to the data recieved
-                                    $(".recent").html(data);
+                                    $(".recent-update").html(data);
                                 });
-                                $(".recent").fadeIn().delay(2000);
+                                $(".recent-update").fadeIn().delay(2000);
                             },
                             error: function(xhr, status, error) {
                                 console.log("Uh oh there was an error: " + error);
@@ -212,7 +212,7 @@ $(document).ready(function(){
                     success: function(signed_in) {
                         // if not signed in or no music has been selected, 
                         // set to default
-                        if (!signed_in && !(current_music.length>0)){
+                        if (!signed_in || !(current_music.length>0)){
                             current_music = convert(pie);
                         }
                         

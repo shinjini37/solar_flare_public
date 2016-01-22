@@ -5,24 +5,6 @@
         {{> links_partial}}
     </head>
     <body>
-        <!----
-        <div class="top-body-container">
-            <div class="logo-container">
-                <div>Logo</div>
-            </div>
-            <div class="music-player-container">
-                <div class="music-player"><br>
-                    <button class="play"> &#9658; </button>
-                    <button class="pause"> &#10074;&#10074; </button>
-                    <button class="stop"> &#8718; </button>  
-                    <div class="playing_user_container">
-                        <div class="player_text playing"></div>
-                        <div class="player_text user"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        -->
         {{> top_body_partial}}
         <div class="main-body-container">
             <div class="nav-profile">
@@ -82,7 +64,10 @@
             </div>
             <div class="nav-music">
                 <div class="recent">
-                    {{> recents_partial }}
+                    <div> Recent Numbers </div>
+                    <div class="recent-update">
+                        {{> recents_partial }}
+                    </div>
                 </div>    
             </div>
         </div>
