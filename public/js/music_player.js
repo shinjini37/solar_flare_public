@@ -2,20 +2,45 @@ $(document).ready(function(){
     // paths to the sound files to be used
     var path = "/acoustic_grand_piano-mp3/";
     var sounds = [
-    path + "C4.mp3",
-    path + "D4.mp3",  
-    path + "E4.mp3",
-    path + "F4.mp3",
-    path + "G4.mp3",
-    path + "A4.mp3",
-    path + "B4.mp3",
-    path + "C5.mp3",
-    path + "D5.mp3",
-    path + "E5.mp3",
+    path + "60" + ".mp3",
+    path + "62" + ".mp3",  
+    path + "64" + ".mp3",
+    path + "65" + ".mp3",
+    path + "67" + ".mp3",
+    path + "69" + ".mp3",
+    path + "71" + ".mp3",
+    path + "72" + ".mp3",
+    path + "74" + ".mp3",
+    path + "76" + ".mp3",
     ];
+
+    var update_sounds = function() {
+                // update sounds
+        var key = Number($("#pitch").val());
+        console.log(key);
+        key += Number($("#accidental").val());
+        var key_type = $("#key_type").val();
+        console.log(key);
+        console.log(key_type);
+        var scale;
+        if (key_type === "Major") {
+            scale = [0, 2, 2, 1, 2, 2, 2, 1, 2, 2];
+        } else if (key_type === "harmonic minor") {
+            scale = [0, 2, 1, 2, 2, 1, 3, 1, 2, 1];
+        } else if (key_type === "natural minor") {
+            scale = [0, 2, 1, 2, 2, 1, 2, 2, 2, 1];
+        }
+        console.log(scale);
+        for (var i = 0; i<10; i++) {
+            key += scale[i];
+            sounds[i] = path + key.toString() + ".mp3";
+        }
+        // sounds is updated
+    }
 
     // convert a number string to an array of Soundmanager sound files
     var convert = function(notestoplay_string){
+        update_sounds();
         var notestoplay_music = [];
         for (var i = 0; i< notestoplay_string.length; i++){
             var currnote = soundManager.createSound({
