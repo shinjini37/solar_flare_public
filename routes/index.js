@@ -88,7 +88,7 @@ router.get('/', function (req, res, next) {
                 username = "Guest";
             }
             // Render index page with all the info gotten
-            res.render('index', {title: 'Numbers', recent:recent, username: username, signed_in:signed_in});
+            res.render('index', {title: 'NumeraMusa', recent:recent, username: username, signed_in:signed_in});
       });
 });
 

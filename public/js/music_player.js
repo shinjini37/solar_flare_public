@@ -107,10 +107,10 @@ $(document).ready(function(){
             if (!signed_in){
                 $.ajax({
                     url: '/update_playing',
-                    data: {current: pie, player: "Numbers"},
+                    data: {current: pie, player: "NumeraMusa"},
                     type: 'POST',
                     success: function(data) {
-                        update_music_info('Numbers', pie);
+                        update_music_info('NumeraMusa', pie);
                     },
                     error: function(xhr, status, error) {
                         console.log("Uh oh there was an error: " + error);

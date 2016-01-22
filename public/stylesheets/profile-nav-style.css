@@ -36,3 +36,9 @@ input{
     background-color: slategray;
 }
 
+.sign-up-info{
+    display: none;
+}
+.sign-up-button:hover .sign-up-info{
+    display: block;
+}

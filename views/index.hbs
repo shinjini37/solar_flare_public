@@ -31,19 +31,25 @@
                     </div>
                     <br>
                     <div class='sign-up'>
-                        <button class='sign-up-button'>Sign Up</button>
+                        <button class='sign-up-button' 
+                        title="Signing up has many benefits! 
+                        You can save you favorite numbers, 
+                        visit other users and save them as your favorites, 
+                        and show off your best creations!">Sign Up</button>
                     </div>
                 {{/if}}
                 </div>
             </div>
             <div class="main-view">
                 <div class="viewer">
-                    <div class="numbers">
+
+                    <div class="numbers"> <div class="now-playing">  Now playing... </div>
                     <div class="entered-number"></div>
                     </div>
                 </div>  
                 <div class="enter-number">
-                    <input type="text" class="enter-number-text" placeholder="Enter a number...">
+                    
+                    <input type="text" class="enter-number-text"  placeholder="Enter a number..." title="Enter a number here to play the music! Hint: Anything other than numbers will be ignored.">
                     <!-- onkeypress="return event.charCode >= 48 && event.charCode <= 57"-->
                     <button class="enter-number-button">Play!</button>
                     <!--
@@ -64,10 +70,21 @@
             </div>
             <div class="nav-music">
                 <div class="recent">
-                    <div class="recents-label"> Recent Numbers </div>
+                    <div class="recents-label" title="Go to another user's profile, or click the numbers to listen to some of the numbers!"> Recent Numbers </div>
                     {{> recents_partial }}
                 </div>    
             </div>
         </div>
+        {{#if signed_in}} 
+        {{else}}
+            <div class="explanation">
+                <h1> Welcome to <i>NumeraMusa</i>! </h1>
+                You can enter numbers below and <br> hear what it sounds like!
+                <br><br>
+                You can also hear NumeraMusa (number-music) <br> created by others, to the left!
+                <br>
+                <div class="crossout">x</div>
+            </div>
+        {{/if}}
     </body>
 </html>
