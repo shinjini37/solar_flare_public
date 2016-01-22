@@ -11,5 +11,7 @@ $(document).ready(function() {
        $(".explanation").css("display","none");  
     });
     
+    document.execCommand("copy");
+    
 });
 

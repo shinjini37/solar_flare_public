@@ -37,7 +37,7 @@ $(document).ready(function() {
       data: entered_data,
       type: 'POST',
       success: function(data) {
-        if (data === "sign in successfully.") {
+        if (data === true) {
           location.reload();
         } else {
           window.alert(data);
@@ -72,9 +72,10 @@ $(document).ready(function() {
         type: 'POST',
         success: function(data) {
             console.log(data);
+            location.reload();
             window.alert(data);
-            $(".username").val('');
-            $(".password").val('');
+            //$(".username").val('');
+            //$(".password").val('');
         },
         error: function() {
         }

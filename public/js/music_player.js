@@ -60,8 +60,18 @@ $(document).ready(function(){
         play_music(notestoplay_music);
     }
 
-    // update the musicplayer display number and artist
-    var update_music_info = function(username, num){
+    var update_musicplayer_display = function(username, num){
+        // update musicplayer display
+        var musicplayer_lim = 50;
+        if(num.length>musicplayer_lim){
+            $(".playing").text(num.slice(0, musicplayer_lim) + '...');    
+        } else {
+            $(".playing").text(num);    
+        }
+        $(".user").text(" by " + username);        
+    };
+    
+    var update_music_display = function(username, num){
         // show entered number
         var num_display_lim = 200;
         if(num.length>num_display_lim){
@@ -70,14 +80,14 @@ $(document).ready(function(){
             $(".entered-number").text(num);    
         }
 
-        // update musicplayer display
-        var musicplayer_lim = 50;
-        if(num.length>musicplayer_lim){
-            $(".playing").text(num.slice(0, musicplayer_lim) + '...');    
-        } else {
-            $(".playing").text(num);    
-        }
-        $(".user").text(" by " + username);
+    };
+
+    // update the musicplayer display number and artist
+    var update_music_info = function(username, num){
+        $(".viewer").css("display", "block");
+        update_musicplayer_display(username, num);
+        update_music_display(username, num);
+        $(".intro-container").css("display", "none");
     };
     
     
@@ -110,7 +120,10 @@ $(document).ready(function(){
                     data: {current: pie, player: "NumeraMusa"},
                     type: 'POST',
                     success: function(data) {
-                        update_music_info('NumeraMusa', pie);
+                        // update musicplayer display
+                        update_musicplayer_display("NumeraMusa", pie);                        
+                        $(".intro-container").css("display", "block");
+                        $(".viewer").css("display", "none");
                     },
                     error: function(xhr, status, error) {
                         console.log("Uh oh there was an error: " + error);

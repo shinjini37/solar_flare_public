@@ -189,12 +189,12 @@ router.post('/signin', function (req, res, next) {
     if (list.length>0){
       if (password === list[0]['password']) {
         sess.username = userName;
-        res.send("sign in successfully.");
+        res.send(true);
       } else {
-        res.send("wrong password.");
+        res.send("Incorrect password.");
       }
     } else {
-      res.send("username does not exist.")
+      res.send("Username does not exist.")
     }
   });
 
@@ -203,16 +203,19 @@ router.post('/signin', function (req, res, next) {
 
 // Sign up
 router.post('/signup', function (req, res, next) {
+  sess=req.session;
+  
   var userName = req.body.username;
   var password = req.body.password;
 
   db.people.find({'username': userName}).toArray(function(err, list) {
     console.log(list);
     if (list.length>0){
-      res.send("username already exists.");
+      res.send("Username already exists.");
     } else { 
       db.people.insert({'username': userName, 'password': password});
-      res.send("sign up successfully.");
+      sess.username = userName;
+      res.send("Signed up successfully!");
     }
   });
 
