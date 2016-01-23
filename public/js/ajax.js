@@ -82,10 +82,13 @@ $(document).ready(function() {
         url: '/signup',
         data: entered_data,
         type: 'POST',
-        success: function(data) {
-            console.log(data);
+        success: function(success) {
             location.reload();
-            window.alert(data);
+            if (success){
+                alert();
+            } else {
+                alert("Username already exists.");
+            }
             //$(".username").val('');
             //$(".password").val('');
         },
@@ -100,32 +103,19 @@ $(document).ready(function() {
   });
 
 
-  $(".login-stuff").on('click', '.sign-out-button', function(){
+  $('.sign-out-button').click(function(){
     $.ajax({
       url: '/signout',
       data: {},
       type: 'POST',
       success: function(data) {
-        location.reload();
+        window.location = "/";
       },
       error: function() {
       }
     });  
   });
-  
-  $(".login-stuff").on('click', '.profile-button', function(){
-    $.ajax({
-      url: '/get_username',
-      data: {},
-      type: 'GET',
-      success: function(username) {
-        window.location = "/profile/"+username;    
-      },
-      error: function() {
-      }
-    });
-      
-  });
+
 
   $(".digit").click(function () {
     var current_number = $(".enter-number-text").val();

@@ -53,6 +53,14 @@
                 <div class="viewer">
                     <div class="numbers"> <div class="now-playing">  Now playing... </div>
                     <div class="entered-number"></div>
+                    </div> 
+                    <TEXTAREA ID="holdtext" STYLE="display:none;">
+                    </TEXTAREA>
+                    <div>
+                        <button class="copy"> Copy number to the input below! </button>
+                    </div>
+                    <div>
+                        <button class="fav-number"> Add to favorites! </button>
                     </div>
                 </div>  
                 <div class="enter-number">
@@ -74,11 +82,11 @@
                     </select>
                     <select id = "key_type">
                         <option value="Major">Major</option>
-                        <option value="natural minor">natural minor</option>
-                        <option value="harmonic minor">harmonic minor</option>
+                        <option value="natural minor">Natural minor</option>
+                        <option value="harmonic minor">Harmonic minor</option>
                     </select>
                     <br>
-                    <button class="enter-number-button">Play!</button>
+                    <button class="enter-number-button">Generate!</button>
                     <!--
                     <br>
                     <button class="digit" name="0">0</button>
@@ -97,7 +105,7 @@
             </div>
             <div class="nav-music">
                 <div class="recent">
-                    <div class="recents-label" title="Go to another user's profile, or click the numbers to listen to some of the numbers!"> Recent Numbers </div>
+                    <div class="recents-label" title="Go to another user's profile, or click the numbers to listen to them! Hint: You can change your key signature to play the number in different keys!"> Recent Numbers </div>
                     {{> recents_partial }}
                 </div>    
             </div>

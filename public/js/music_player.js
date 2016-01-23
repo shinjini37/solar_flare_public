@@ -346,7 +346,10 @@ $(document).ready(function(){
                 });
                 
             });
-
+            
+            $(".copy").click(function(){
+                $(".enter-number-text").val(current);
+            });
         },
         ontimeout: function() {
             // Hrmm, SM2 could not start. Missing SWF? Flash blocked? Show an error, etc.?

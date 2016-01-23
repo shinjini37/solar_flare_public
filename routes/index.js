@@ -101,7 +101,17 @@ router.get('/', function (req, res, next) {
 /* POST to enter_number */
 router.post('/enter_number', function (req, res, next) {
     sess=req.session;
-
+    
+    // for asynchronous calls
+    var one = null;
+    var two = null;
+        
+    var finished = function(){
+        if (!(one === null) && !(two === null)){
+            res.send(sess.username);    
+        }
+    }
+    
     // Catching variables passed in the form
     var userNum = req.body.num;
     
@@ -117,20 +127,23 @@ router.post('/enter_number', function (req, res, next) {
             db.recentnums.insert({_id: "recents", recents:[]});
             db.recentnums.update({_id: "recents"}, { $push: {recents:{name: sess.username, num:userNum}}});
         }
-
-        // Adding the new entry to the db (recents by user)
-        db.usernums.find({username: sess.username}).toArray(function (err, list){
-            if (list.length>0){
-                db.usernums.update({username: sess.username}, { $push: {recents:{num:userNum}}});
-            } else { // if recentnums is empty, make an empty array and populate it
-                db.usernums.insert({username: sess.username, recents:[]});
-                db.usernums.update({username: sess.username}, { $push: {recents:{num:userNum}}});
-            }
-            // send back the username
-            // do we need to?
-            res.send(sess.username);
-        });
+        one = "one";
+        finished();
+        
     });
+    
+    // Adding the new entry to the db (recents by user)
+    db.usernums.find({username: sess.username}).toArray(function (err, list){
+        if (list.length>0){
+            db.usernums.update({username: sess.username}, { $push: {recents:{num:userNum}}});
+        } else { // if recentnums is empty, make an empty array and populate it
+            db.usernums.insert({username: sess.username, recents:[]});
+            db.usernums.update({username: sess.username}, { $push: {recents:{num:userNum}}});
+        }
+        two = "two";
+        finished();        
+    });
+
 });
 
 
@@ -211,11 +224,11 @@ router.post('/signup', function (req, res, next) {
   db.people.find({'username': userName}).toArray(function(err, list) {
     console.log(list);
     if (list.length>0){
-      res.send("Username already exists.");
+      res.send(false);
     } else { 
       db.people.insert({'username': userName, 'password': password});
       sess.username = userName;
-      res.send("Signed up successfully!");
+      res.send(true);
     }
   });
 
@@ -228,9 +241,7 @@ router.post('/signout', function (req, res, next) {
     req.session.destroy(function(err){
         if(err){
             console.log(err);
-        }
-        else
-        {
+        } else {
             res.redirect('/');
         }
     });
@@ -241,6 +252,33 @@ router.post('/signout', function (req, res, next) {
 /* GET profile. */
 router.get('/profile/:username', function (req, res, next) {
     var username = req.params.username;
+    var signed_in = false;
+    var user_own_profile = false;
+    var fav_users = [];
+    var recent = [];
+    var my_recent = [];    
+    var in_fav_users= false;
+    var something = "popsicle";
+        
+    // for asynchronous calls
+    var one = null;
+    var two = null;
+    var three = null;
+        
+    var finished = function(){
+        if (!(one === null) && !(two === null) && !(three === null)){
+            console.log("user own profile");
+            console.log(user_own_profile);
+            console.log("in fav");
+            console.log(in_fav_users);
+            console.log(something);
+            res.render('profile', { title: username, username:username, 
+                        signed_in: signed_in, user_own_profile:user_own_profile, 
+                        fav_users:fav_users, in_fav_users: in_fav_users,
+                        recent:recent, my_recent: my_recent});
+        }
+    }
+    
     db.people.find({'username': username}).toArray(function(err, list) {
         if (list.length>0){ // only registered users get profiles
             if (username === 'anon'){ // anon doesn't have a profile
@@ -258,37 +296,66 @@ router.get('/profile/:username', function (req, res, next) {
                 if (!sess.curr_player){
                     sess.curr_player = 'anon';
                 }
-
-                // showing recent numbers on number navigation
-
-                var recent = [];
-                var my_recent = [];
                 
-                var signed_in;
+                if (sess.username === username){ // if user's own profile
+                    user_own_profile = true;
+                } else { // if someone else's profile
+                    user_own_profile = false;
+                }
+                
+                
+
                 //if logged in, show logged in
                 if(!(typeof (sess.username) == 'undefined') && !(sess.username==='anon')){
                     signed_in = true;
                 } else {//else, show anon
                     signed_in = false;
                 }
+                console.log("signed in");
+                console.log(signed_in);
+
                 
-                db.recentnums.find({}).toArray(function(err, list){
+                if (signed_in){
+                    // find all fav or check if user in favorite
+                    db.userfavusers.find({username:sess.username}).toArray(function(err, list){
+                        if (list.length>0){
+                            // for rendering fav userlist
+                            fav_users = list[0]['fav_users'];
+                            something = "something";
+                            // for checking if user in fav userlist
+                            for (var i = 0; i < fav_users.length; i++) {
+                                console.log(fav_users[i]);
+                                if (fav_users[i].fav_username === username) {
+                                    in_fav_users = true;
+                                    break;
+                                }
+                            }
+                        }
+                        one = "one";
+                        finished();
+                    });
                     if (sess.username === username){ // if user's own profile
-                        var user_own_profile = true;
-                        recent = recent_nums(list, 5).recent;
-                        
                         db.usernums.find({username:username}).toArray(function(err, list){
                             my_recent = recent_nums(list, 10, username).recent;
-                            // Rendering the index view with the title as the username
-                            res.render('profile', { title: username, username:username, signed_in: signed_in, user_own_profile:user_own_profile, recent:recent, my_recent: my_recent});
+                            
+                            two = "two";
+                            finished();
                         });
-                    } else { // if someone else's profile
-                        var user_own_profile = false;
-                        recent = recent_nums(list, 5).recent;
-                        // Rendering the index view with the title as the username
-                        res.render('profile', { title: username, username:username,  signed_in: signed_in, user_own_profile:user_own_profile, recent:recent});
+                    } else { // if not user's own, don't load these
+                        two = "two";
+                        finished();
                     }
-                    
+                } else { //if not signed in, don't load anything
+                    one = "one";
+                    two = "two";
+                    finished();
+                }
+                
+                // load all recent numbers
+                db.recentnums.find({}).toArray(function(err, list){
+                    recent = recent_nums(list, 5).recent;
+                    three = "three";
+                    finished();
                 });
             }
         } else { // not registered
@@ -307,23 +374,31 @@ router.post("/add_fav_user", function(req, res, next){
     var fav_username = req.body.fav_username;
     
     if(!(typeof (sess.username) == 'undefined') && !(sess.username==='anon')){
-        console.log("1");
-        console.log(sess.username);
-        console.log(db.userfavusers);
-        console.log(db.userfavusers.find({username: sess.username}));
-        
         db.userfavusers.find({username: sess.username}).toArray(function (err, list){
-            console.log("2");
+            
+            var already_in = false;
+            
             if (list.length>0){
-                console.log("3");
-                db.userfavusers.update({username: sess.username}, { $push: {fav_users:{num:fav_username}}});
+                /*
+                var fav_users = list[0]['fav_users'];
+                for (var i = 0; i < fav_users.length; i++) {
+                    if (fav_users[i].fav_username === fav_username) {
+                        already_in = true;
+                        break;
+                    }
+                } 
+                if (!already_in){
+                    db.userfavusers.update({username: sess.username}, { $addToSet: {fav_users:{fav_username:fav_username}}});
+                }
+                */    
+                db.userfavusers.update({username: sess.username}, { $addToSet: {fav_users:{fav_username:fav_username}}});
             } else { // if recentnums is empty, make an empty array and populate it
-            console.log("2");
                 db.userfavusers.insert({username: sess.username, fav_users:[]});
-                db.userfavusers.update({username: sess.username}, { $push: {fav_users:{num:fav_username}}});
+                db.userfavusers.update({username: sess.username}, { $addToSet: {fav_users:{fav_username:fav_username}}});
+
             }
             // send back
-            res.send("success!");
+            res.send(already_in);            
         });
     }
     

@@ -35,7 +35,6 @@ app.use(session({secret: 'suchsecretwow',
 
 
 
-
 app.use('/', routes);
 //app.use('/profile', profile);
 
