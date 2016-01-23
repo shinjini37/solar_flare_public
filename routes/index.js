@@ -333,8 +333,63 @@ router.get('/profile/:username', function (req, res, next) {
                 }
                 console.log("signed in");
                 console.log(signed_in);
-
                 
+                // both when signed in or not
+                // load all recent numbers
+                db.recentnums.find({}).toArray(function(err, list){
+                    recent = recent_nums(list, 5).recent;
+                    three = "three";
+                    finished();
+                });
+                
+                // load fav nums, all if own profile, public if someone else's
+                db.userfavnums.find({username:username}).toArray(function(err, list){
+                    if (list.length>0){
+                        // for rendering fav userlist
+                        var fav_nums_raw = list[0]['fav_nums'];
+                        if (user_own_profile){
+                            for (var i = 0; i<fav_nums_raw.length; i++){
+                                var num = fav_nums_raw[i].num;
+                                var num_short = num;
+                                var len = 5;
+                                if (num.length>len){
+                                    num_short = num.slice(0,len) + '...';
+                                }
+                                var anon;
+                                var player = fav_nums_raw[i].player;
+                                if (player === "anon"){
+                                    anon = true;
+                                } else {
+                                    anon = false;
+                                }
+                                fav_nums.push({num:num, num_short: num_short, player: player, anon: anon});
+                            }
+                        } else {
+                            for (var i = 0; i<fav_nums_raw.length; i++){
+                                if (fav_nums_raw[i].visible){
+                                    var num = fav_nums_raw[i].num;
+                                    var num_short = num;
+                                    var len = 5;
+                                    if (num.length>len){
+                                        num_short = num.slice(0,len) + '...';
+                                    }
+                                    var anon;
+                                    var player = fav_nums_raw[i].player;
+                                    if (player === "anon"){
+                                        anon = true;
+                                    } else {
+                                        anon = false;
+                                    }
+                                    fav_nums.push({num:num, num_short: num_short, player: player, anon: anon});
+                                }
+                            }
+                        }
+                    }
+                    four = "four";
+                    finished();
+                });
+
+                // only if signed in
                 if (signed_in){
                     // find all fav or check if user in favorite
                     db.userfavusers.find({username:sess.username}).toArray(function(err, list){
@@ -353,15 +408,7 @@ router.get('/profile/:username', function (req, res, next) {
                         one = "one";
                         finished();
                     });
-                    db.userfavnums.find({username:sess.username}).toArray(function(err, list){
-                        if (list.length>0){
-                            // for rendering fav userlist
-                            fav_nums = list[0]['fav_nums'];
-                            console.log(fav_nums);
-                        }
-                        four = "four";
-                        finished();
-                    });
+
                     if (sess.username === username){ // if user's own profile
                         db.usernums.find({username:username}).toArray(function(err, list){
                             my_recent = recent_nums(list, 10, username).recent;
@@ -376,16 +423,8 @@ router.get('/profile/:username', function (req, res, next) {
                 } else { //if not signed in, don't load anything
                     one = "one";
                     two = "two";
-                    four = "four";
                     finished();
                 }
-                
-                // load all recent numbers
-                db.recentnums.find({}).toArray(function(err, list){
-                    recent = recent_nums(list, 5).recent;
-                    three = "three";
-                    finished();
-                });
             }
         } else { // not registered
             res.redirect("/");

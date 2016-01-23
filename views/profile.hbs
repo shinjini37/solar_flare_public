@@ -17,18 +17,6 @@
                         </div>
                         <button class="sign-out-button"> Sign Out </button>
                         {{#if user_own_profile}}
-                            <div class="fav-users">
-                                {{#fav_users}}
-                                    <a href="/profile/{{fav_username}}">{{fav_username}}</a>
-                                {{/fav_users}}
-                            </div>
-                            <div class="recent">
-                                {{#fav_nums}}
-                                    <div class="play_recent" style="display:inline-block" data-username={{player}} data-num={{num}}>
-                                        {{num}}
-                                    </div>
-                                {{/fav_nums}}
-                            </div>
                         {{else}}
                             {{#if in_fav_users}}
                                 <div> {{username}} is one of your favorites! </div>
@@ -41,6 +29,25 @@
             </div>
             <div class="main-view">
                 <div class="viewer">
+                    <div class="recent">
+                        {{#fav_nums}}
+                            <div class="play_recent" style="display:inline-block" data-username={{player}} data-num={{num_short}}>
+                                {{num}}
+                            </div> by 
+                            {{#if anon}}
+                                anon
+                            {{else}}
+                                <a href="/profile/{{player}}">{{player}}</a>
+                            {{/if}}
+                        {{/fav_nums}}
+                    </div>
+                    {{#if user_own_profile}}
+                            <div class="fav-users">
+                                {{#fav_users}}
+                                    <a href="/profile/{{fav_username}}">{{fav_username}}</a>
+                                {{/fav_users}}
+                            </div>
+                     {{/if}}
                 </div>  
             </div>
             <div class="nav-music">
