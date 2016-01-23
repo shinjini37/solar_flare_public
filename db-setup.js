@@ -21,7 +21,7 @@ mongo.connect(dbConnectionUrl, function (err, db) {
   collections.recentnums = db.collection('recentnums');
   collections.usernums = db.collection('usernums');
   collections.userfavusers= db.collection('userfavusers');
-  collections.userfavnumbers= db.collection('userfavnumbers');
+  collections.userfavnums= db.collection('userfavnums');
   
 });
 

@@ -59,9 +59,11 @@
                     <div>
                         <button class="copy"> Copy number to the input below! </button>
                     </div>
-                    <div>
-                        <button class="fav-number"> Add to favorites! </button>
-                    </div>
+                    {{#if signed_in}}
+                        <div>
+                            <button class="add-fav-number"> Add to favorite numbers! </button>
+                        </div>
+                    {{/if}}
                 </div>  
                 <div class="enter-number">
                     <input type="text" class="enter-number-text"  placeholder="Enter a number..." title="Enter a number here to play the music! Hint: Anything other than numbers will be ignored." onkeypress="return event.charCode >= 48 && event.charCode <= 57">

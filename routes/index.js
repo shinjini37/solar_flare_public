@@ -4,6 +4,7 @@ var router = express.Router();
 // Access to real DB
 var db = require('../db-setup.js');
 
+
 // For session variables
 var sess;
 
@@ -187,6 +188,25 @@ router.post('/update_recent_numbers', function (req, res, next) {
     });
 });
 
+router.post('/add_fav_num', function(req, res, next){
+    sess=req.session;
+    var num = req.body.current;
+    var player = req.body.player;    
+    db.userfavnums.find({username: sess.username}).toArray(function (err, list){
+            if (list.length>0){
+                db.userfavnums.update({username: sess.username}, { $addToSet: {fav_nums:{num:num, player: player, visible:false}}});
+            } else { // if recentnums is empty, make an empty array and populate it
+                db.userfavnums.insert({username: sess.username, fav_nums:[]});
+                db.userfavnums.update({username: sess.username}, { $addToSet: {fav_nums:{num:num, player: player, visible:false}}});
+            }
+            // send back
+            res.send();            
+        });
+    
+    
+    res.send({});
+});
+
 
 // <------------------------------------------user session code------------------------------------------>
 
@@ -258,23 +278,23 @@ router.get('/profile/:username', function (req, res, next) {
     var recent = [];
     var my_recent = [];    
     var in_fav_users= false;
-    var something = "popsicle";
+    var fav_nums = [];
         
     // for asynchronous calls
+    // TODO rename these
     var one = null;
     var two = null;
     var three = null;
+    var four = null;
         
     var finished = function(){
-        if (!(one === null) && !(two === null) && !(three === null)){
-            console.log("user own profile");
-            console.log(user_own_profile);
-            console.log("in fav");
-            console.log(in_fav_users);
-            console.log(something);
+        if (!(one === null) && !(two === null) && !(three === null)
+                    && !(four === null)){
+            console.log("fav_nums");
+            console.log(fav_nums);
             res.render('profile', { title: username, username:username, 
                         signed_in: signed_in, user_own_profile:user_own_profile, 
-                        fav_users:fav_users, in_fav_users: in_fav_users,
+                        fav_users:fav_users, in_fav_users: in_fav_users, fav_nums:fav_nums,
                         recent:recent, my_recent: my_recent});
         }
     }
@@ -321,7 +341,6 @@ router.get('/profile/:username', function (req, res, next) {
                         if (list.length>0){
                             // for rendering fav userlist
                             fav_users = list[0]['fav_users'];
-                            something = "something";
                             // for checking if user in fav userlist
                             for (var i = 0; i < fav_users.length; i++) {
                                 console.log(fav_users[i]);
@@ -332,6 +351,15 @@ router.get('/profile/:username', function (req, res, next) {
                             }
                         }
                         one = "one";
+                        finished();
+                    });
+                    db.userfavnums.find({username:sess.username}).toArray(function(err, list){
+                        if (list.length>0){
+                            // for rendering fav userlist
+                            fav_nums = list[0]['fav_nums'];
+                            console.log(fav_nums);
+                        }
+                        four = "four";
                         finished();
                     });
                     if (sess.username === username){ // if user's own profile
@@ -348,6 +376,7 @@ router.get('/profile/:username', function (req, res, next) {
                 } else { //if not signed in, don't load anything
                     one = "one";
                     two = "two";
+                    four = "four";
                     finished();
                 }
                 

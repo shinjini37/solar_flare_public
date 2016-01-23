@@ -110,6 +110,7 @@ $(document).ready(function(){
     // update the musicplayer display number and artist
     var update_music_info = function(username, num){
         $(".viewer").css("display", "block");
+        user_playing = username;
         update_musicplayer_display(username, num);
         update_music_display(username, num);
         $(".intro-container").css("display", "none");
@@ -349,6 +350,20 @@ $(document).ready(function(){
             
             $(".copy").click(function(){
                 $(".enter-number-text").val(current);
+            });
+            
+            
+            $(".add-fav-number").click(function(){
+               $.ajax({
+                  url: '/add_fav_num',
+                    data: {current: current, player: user_playing},
+                    type: 'POST',
+                    success: function(data) {
+                    },
+                    error: function(xhr, status, error) {
+                        console.log("Uh oh there was an error: " + error);
+                    }
+               }); 
             });
         },
         ontimeout: function() {
