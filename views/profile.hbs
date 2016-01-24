@@ -16,7 +16,7 @@
                 {{/if}}
                 <div class="nav-profile">
                     <div class="profile-stuff">
-                        <h2><a href="/profile/{{username}}">{{username}}</a></h2>
+                        <h2>{{username}}</h2>
                         {{#if signed_in}}
                             {{#if user_own_profile}}
                                 <button class="fav-numbers"> My favorite numbers! </button>
@@ -42,6 +42,11 @@
                 <div class="profile-viewer">
                     <div class="profile recent">
                         <div class="profile-main numbers">
+                            {{#if user_own_profile}}
+                                <b>My favorite numbers</b> <br><br>
+                            {{else}}
+                                <b>{{username}}'s favorite numbers</b> <br><br>
+                            {{/if}}
                             <table>
                                 <tr>
                                     <td> Number </td>
@@ -78,6 +83,7 @@
                             {{/fav_nums}}
                             </table>
                             {{#if user_own_profile}}
+                            
                             <div class="profile-main-buttons">
                                 <button class="save-public"> Save </button> 
                                 <button class="cancel-public"> Cancel</button>
@@ -86,12 +92,13 @@
                         </div>
                         <div class="profile-main users">
                             {{#if user_own_profile}}
-                                    <div class="fav-users">
-                                        {{#fav_users}}
-                                            <a href="/profile/{{fav_username}}">{{fav_username}}</a>
-                                            <br>
-                                        {{/fav_users}}
-                                    </div>
+                                <b>My favorite users</b> <br><br>
+                                <div class="fav-users">
+                                    {{#fav_users}}
+                                        <a href="/profile/{{fav_username}}">{{fav_username}}</a>
+                                        <br>
+                                    {{/fav_users}}
+                                </div>
                             {{/if}}
                         </div>
                     </div>

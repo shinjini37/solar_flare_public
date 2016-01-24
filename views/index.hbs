@@ -18,7 +18,7 @@
                     <!--{{{welcome}}}-->
                     <h2> Welcome, 
                         {{#if signed_in}}
-                            <a href="/profile/"{{username}}" >{{username}}!</a>
+                            <a href="/profile/{{username}}" >{{username}}!</a>
                         {{else}} 
                             Guest!
                         {{/if}}
@@ -105,7 +105,7 @@
                             </td>
                             <td>
                     <select id = "key_type">
-                        <option value="Major">Major</option>
+                        <option value="major">Major</option>
                         <option value="natural minor">Natural minor</option>
                         <option value="harmonic minor">Harmonic minor</option>
                     </select>

@@ -8,6 +8,7 @@
     height: 60%;
     width: 80%;
     margin: 7% auto 7% auto;
+    text-align: center;
 }
 
 .profile-viewer{
@@ -37,7 +38,7 @@
     bottom: 5%;
     right: 5%;
     width: 100%;
-    margin-right: -70%;
+    margin-right: -30%;
 }
 
 .profile-main-buttons button{
