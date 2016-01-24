@@ -4,7 +4,8 @@ var router = express.Router();
 // Access to real DB
 var db = require('../db-setup.js');
 
-
+var db_loaded = db;
+ 
 // For session variables
 var sess;
 
@@ -89,7 +90,7 @@ router.get('/', function (req, res, next) {
                 username = "Guest";
             }
             // Render index page with all the info gotten
-            res.render('index', {title: 'NumeraMusa', recent:recent, username: username, signed_in:signed_in});
+            res.render('index', {title: 'NumeraMusa', recent:recent, username: username, signed_in:signed_in, signed_in_as: sess.username});
       });
 });
 
@@ -193,19 +194,47 @@ router.post('/add_fav_num', function(req, res, next){
     var num = req.body.current;
     var player = req.body.player;    
     db.userfavnums.find({username: sess.username}).toArray(function (err, list){
-            if (list.length>0){
-                db.userfavnums.update({username: sess.username}, { $addToSet: {fav_nums:{num:num, player: player, visible:false}}});
-            } else { // if recentnums is empty, make an empty array and populate it
-                db.userfavnums.insert({username: sess.username, fav_nums:[]});
+        var already_in = false;
+        if (list.length>0){
+            var fav_nums = list[0]['fav_nums'];
+            for (var i = 0; i < fav_nums.length; i++) {
+                if (fav_nums[i].num === num) {
+                    already_in = true;
+                    break;
+                }
+            } 
+            if (!already_in){
                 db.userfavnums.update({username: sess.username}, { $addToSet: {fav_nums:{num:num, player: player, visible:false}}});
             }
-            // send back
-            res.send();            
-        });
-    
-    
-    res.send({});
+        } else { // if recentnums is empty, make an empty array and populate it
+            db.userfavnums.insert({username: sess.username, fav_nums:[]});
+            db.userfavnums.update({username: sess.username}, { $addToSet: {fav_nums:{num:num, player: player, visible:false}}});
+        }
+        // send back
+        res.send(already_in);            
+    });
 });
+
+router.post('/update_visible', function(req, res, next){
+    sess=req.session;
+    var change = req.body.change;
+    change = JSON.parse(change);
+    console.log(req.body);
+    console.log(req.body.change);
+    console.log(change);
+    var arr = [];
+    
+    for(var x in change){
+        arr.push(change[x]);
+    }
+    db.userfavnums.find({username: sess.username}).toArray(function (err, list){
+        if (list.length>0){
+            db.userfavnums.update({username: sess.username}, {$set:{fav_nums:arr}});
+        }
+        res.send(true);
+    });
+});
+
 
 
 // <------------------------------------------user session code------------------------------------------>
@@ -292,7 +321,7 @@ router.get('/profile/:username', function (req, res, next) {
                     && !(four === null)){
             console.log("fav_nums");
             console.log(fav_nums);
-            res.render('profile', { title: username, username:username, 
+            res.render('profile', { title: username, signed_in_as: sess.username, username:username, 
                         signed_in: signed_in, user_own_profile:user_own_profile, 
                         fav_users:fav_users, in_fav_users: in_fav_users, fav_nums:fav_nums,
                         recent:recent, my_recent: my_recent});
@@ -362,7 +391,7 @@ router.get('/profile/:username', function (req, res, next) {
                                 } else {
                                     anon = false;
                                 }
-                                fav_nums.push({num:num, num_short: num_short, player: player, anon: anon});
+                                fav_nums.push({num:num, num_short: num_short, player: player, anon: anon, visibility:fav_nums_raw[i].visible, user_own_profile: user_own_profile });
                             }
                         } else {
                             for (var i = 0; i<fav_nums_raw.length; i++){
@@ -380,7 +409,7 @@ router.get('/profile/:username', function (req, res, next) {
                                     } else {
                                         anon = false;
                                     }
-                                    fav_nums.push({num:num, num_short: num_short, player: player, anon: anon});
+                                    fav_nums.push({num:num, num_short: num_short, player: player, anon: anon, visibility:fav_nums_raw[i].visible, user_own_profile: user_own_profile});
                                 }
                             }
                         }

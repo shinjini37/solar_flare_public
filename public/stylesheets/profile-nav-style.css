@@ -1,7 +1,7 @@
 .nav-profile{
     text-align: left;
-    padding-left: 3%;
-    padding-right: 3%;
+    padding-left: 10%;
+    padding-right: 10%;
     color: #ecf0f1;    
 }
 ul{
@@ -10,18 +10,22 @@ ul{
 
 .username{
     width: 90%;    
-    border: solid 1px #457D7B;
+    border: solid 1px #2c3e50;
     padding: 5px;
 }
 
 .password{
     width: 90%;    
-    border:  solid 1px #457D7B;
+    border:  solid 1px #2c3e50;
     padding: 5px;
 }
 
 button{
     font-size: .9em;
+    color: #ecf0f1;
+    border: solid 1px #2c3e50;
+    padding: 5px;
+    background-color: slategray;
 }
 
 input{
@@ -29,11 +33,6 @@ input{
 }
 .nav-profile button{
     width: 70%;
-    color: #ecf0f1;
-    border: solid 1px #457D7B;
-    padding: 5px;
-    margin: auto;
-    background-color: slategray;
 }
 
 
@@ -65,4 +64,11 @@ input{
 .sign-up-box button{
     width: 30%;
     margin: auto;
+}
+
+.signed-in-as{
+    padding: 5%;
+    width: 90%;
+    text-align: center;
+    background-color: #294545;
 }

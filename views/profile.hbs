@@ -8,46 +8,93 @@
         <!---->
         {{> top_body_partial}}
         <div class="main-body-container">
-            <div class="nav-profile">
-                <div class="profile-stuff">
-                    <h2><a href="/profile/{{username}}">{{username}}</a></h2>
-                    {{#if signed_in}}
-                        <div class='user-profile'>
-                            <button class='profile-button'>My Profile</button>
-                        </div>
-                        <button class="sign-out-button"> Sign Out </button>
-                        {{#if user_own_profile}}
-                        {{else}}
-                            {{#if in_fav_users}}
-                                <div> {{username}} is one of your favorites! </div>
+            <div class="nav-profile-full">
+                {{#if signed_in}}
+                <div class="signed-in-as">
+                     Signed in as  <a href="/profile/{{signed_in_as}}">{{signed_in_as}}</a>  
+                </div>
+                {{/if}}
+                <div class="nav-profile">
+                    <div class="profile-stuff">
+                        <h2><a href="/profile/{{username}}">{{username}}</a></h2>
+                        {{#if signed_in}}
+                            {{#if user_own_profile}}
+                                <button class="fav-numbers"> My favorite numbers! </button>
+                                <button class="fav-users"> My favorite users! </button>
                             {{else}}
-                                <button class="add-user-fav" data-username={{username}}>Add {{username}} to my favorites!</button>
+                                {{#if in_fav_users}}
+                                    <div> {{username}} is one of your favorites! </div>
+                                {{else}}
+                                    <button class="add-user-fav" data-username={{username}}>Add {{username}} to my favorites!</button>
+                                {{/if}}
                             {{/if}}
+                            <br><br><br><br><br><br>
+                            <div class='user-profile'>
+                                <button class='profile-button'>My Profile</button>
+                            </div>
+                            <br>
+                            <button class="sign-out-button"> Sign Out </button>
                         {{/if}}
-                    {{/if}}
+                    </div>
                 </div>
             </div>
             <div class="main-view">
-                <div class="viewer">
-                    <div class="recent">
-                        {{#fav_nums}}
-                            <div class="play_recent" style="display:inline-block" data-username={{player}} data-num={{num_short}}>
-                                {{num}}
-                            </div> by 
-                            {{#if anon}}
-                                anon
-                            {{else}}
-                                <a href="/profile/{{player}}">{{player}}</a>
-                            {{/if}}
-                        {{/fav_nums}}
-                    </div>
-                    {{#if user_own_profile}}
-                            <div class="fav-users">
-                                {{#fav_users}}
-                                    <a href="/profile/{{fav_username}}">{{fav_username}}</a>
-                                {{/fav_users}}
+                <div class="profile-viewer">
+                    <div class="profile recent">
+                        <div class="profile-main numbers">
+                            <table>
+                                <tr>
+                                    <td> Number </td>
+                                    <td></td>
+                                    <td> Artist </td>
+                                    {{#if user_own_profile}}
+                                        <td> Public? </td>
+                                    {{/if}}
+                                </tr>
+                                <tr><td></td></tr>
+                            {{#fav_nums}}
+                                <tr>
+                                    <td>
+                                        <div class="play_recent" style="display:inline-block" data-username={{player}} data-num={{num}}>
+                                            {{num_short}}
+                                        </div> 
+                                    </td>
+                                    <td> by </td>
+                                    <td>
+                                        {{#if anon}}
+                                            anon
+                                        {{else}}
+                                            <a href="/profile/{{player}}">{{player}}</a>
+                                        {{/if}}
+                                    </td>
+                                    {{#if user_own_profile}}
+                                        {{#if visibility}}
+                                        <td> <input type="checkbox" data-username={{player}} data-num={{num}} data-visibility={{visibility}} class="is_public" checked /> </td>
+                                        {{else}}
+                                        <td> <input type="checkbox" data-username={{player}} data-num={{num}} data-visibility={{visibility}} class="is_public" /> </td>
+                                        {{/if}}
+                                    {{/if}}
+                                </tr>
+                            {{/fav_nums}}
+                            </table>
+                            {{#if user_own_profile}}
+                            <div class="profile-main-buttons">
+                                <button class="save-public"> Save </button> 
+                                <button class="cancel-public"> Cancel</button>
                             </div>
-                     {{/if}}
+                            {{/if}}
+                        </div>
+                        <div class="profile-main users">
+                            {{#if user_own_profile}}
+                                    <div class="fav-users">
+                                        {{#fav_users}}
+                                            <a href="/profile/{{fav_username}}">{{fav_username}}</a>
+                                            <br>
+                                        {{/fav_users}}
+                                    </div>
+                            {{/if}}
+                        </div>
+                    </div>
                 </div>  
             </div>
             <div class="nav-music">
