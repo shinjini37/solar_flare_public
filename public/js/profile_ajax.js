@@ -27,12 +27,12 @@ $(document).ready(function() {
             success: function(already_in) {
                 if (!already_in){
                     console.log("29");
-                    location.reload();
+                    //location.reload();
                     $(".add-user-fav").text("Remove " + fav_username + "from my favorites!");
                     //alert(fav_username + " has been added to your favorites!");
                 }else{
                     console.log("34");
-                    location.reload();
+                    //location.reload();
                     $(".add-user-fav").text("Add " + fav_username + "to my favorites!");
 
                 }
