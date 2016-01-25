@@ -195,7 +195,7 @@ router.post('/add_fav_num', function(req, res, next){
     sess=req.session;
     var num = req.body.current;
     var player = req.body.player;    
-    db.userfavnums.find({username: sess.username}).toArray(function (err, list){
+    db.userfavnums.find({username: sess.username}).limit(1).toArray(function (err, list){
         var already_in = false;
         if (list.length>0){
             var fav_nums = list[0]['fav_nums'];
@@ -507,7 +507,7 @@ router.post("/add_fav_user", function(req, res, next){
     var fav_username = req.body.fav_username;
     
     if(!(typeof (sess.username) == 'undefined') && !(sess.username==='anon')){
-        db.userfavusers.find({username: sess.username}).toArray(function (err, list){
+        db.userfavusers.find({username: sess.username}).limit(1).toArray(function (err, list){
             
             var already_in = false;
             

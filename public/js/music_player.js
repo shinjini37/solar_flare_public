@@ -402,8 +402,12 @@ $(document).ready(function(){
                   url: '/add_fav_num',
                     data: {current: current, player: user_playing},
                     type: 'POST',
-                    success: function(data) {
-                        $(".add-fav-number").text("Added!"); 
+                    success: function(already_in) {
+                        if (already_in){
+                            $(".add-fav-number").text("It's already in your favorites!");
+                        } else {
+                            $(".add-fav-number").text("Added!"); 
+                        }
                         $(".add-fav-number").attr('disabled', false);
                         setTimeout( function() { $(".add-fav-number").text("Add to favorite numbers!"); 
                                         }, 500)
