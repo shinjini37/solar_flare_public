@@ -298,6 +298,28 @@ router.post('/signout', function (req, res, next) {
     });
 });
 
+// <------------------------------------------search user code------------------------------------------>
+
+router.post('/find_user', function (req, res, next) {
+    var username = req.body.username;
+    console.log("username");
+    console.log(req.body);
+    db.people.find({'username': username}).toArray(function(err, list) {
+        console.log(list);
+        if (list.length>0){
+            res.send(true);
+        } else { 
+            res.send(false);
+        }
+    });
+
+
+
+
+
+});
+
+
 // <------------------------------------------profile page code------------------------------------------>
 
 /* GET profile. */

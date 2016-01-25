@@ -9,11 +9,7 @@
         {{> top_body_partial}}
         <div class="main-body-container">
             <div class="nav-profile-full">
-                {{#if signed_in}}
-                <div class="signed-in-as">
-                     Signed in as  <a href="/profile/{{signed_in_as}}">{{signed_in_as}}</a>  
-                </div>
-                {{/if}}
+                {{> search-partial}}
                 <div class="nav-profile">
                     <div class="profile-stuff">
                         <div class="username-area">

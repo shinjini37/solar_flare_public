@@ -1,0 +1,12 @@
+{{#if signed_in}}
+<div class="signed-in-as">
+        Signed in as  <a href="/profile/{{signed_in_as}}">{{signed_in_as}}</a>   
+</div>
+{{/if}}
+<div class="signed-in-as search">
+    <input type="text" placeholder="find a user" class="search-text"/> 
+    <button class="search-button"> Search </button>
+    <br>
+    <div class="search-result"></div>
+</div>
+

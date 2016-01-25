@@ -115,6 +115,32 @@ $(document).ready(function() {
     });  
   });
 
+  $(".search-button").click(function(){
+     var username = $(".search-text").val();
+     console.log(username);
+     console.log("waat");
+     $.ajax({
+      url: '/find_user',
+      data: {username: username},
+      type: 'POST',
+      success: function(found) {
+          if (found){
+              $(".search-result").text("Found! Redirecting...");
+            window.location = "/profile/"+username;
+          } else {
+              $(".search-result").text("User not found");
+              setTimeout( function() { $(".search-result").fadeOut(800, function() {
+                                                                $(".search-result").text("");
+                                                            }); 
+                                        }, 700)
+          }
+      },
+      error: function() {
+      }
+    });
+         
+  });
+
 
   $(".digit").click(function () {
     var current_number = $(".enter-number-text").val();
