@@ -10,6 +10,7 @@ $(document).ready(function() {
         window.location = "/profile/"+username;    
       },
       error: function() {
+          alert("Sorry, there was an error...");
       }
     });
       
@@ -33,6 +34,7 @@ $(document).ready(function() {
                 }
             },
             error: function() {
+                alert("Sorry, there was an error...");
                 console.log("error in add user as favorite");
             }
             
@@ -44,7 +46,9 @@ $(document).ready(function() {
         var checks = $(".is_public");
         var change= {};  
         $(checks).attr('disabled', true); 
-        $(".save-public").attr('disabled', true);        
+        $(".save-public").text("Saving..."); 
+        $(".save-public").attr('disabled', true);
+        $(".cancel-public").attr('disabled', true);        
         for(var i = 0; i<checks.length; i++){
             var num = $(checks[i]).data('num');
             var player = $(checks[i]).data('username');
@@ -58,10 +62,15 @@ $(document).ready(function() {
             data: data,
             type: 'POST',
             success: function(data) {
+                $(".save-public").text("Save");
                 $(checks).attr('disabled', false); 
                 $(".save-public").attr('disabled', false);
+                 $(".cancel-public").attr('disabled', false); 
             },
             error: function() {
+                alert("Sorry, there was an error...");
+                $(".save-public").text("Save");
+                $(checks).attr('disabled', false); 
                 console.log("error in update user");
             }
             

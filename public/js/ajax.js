@@ -85,7 +85,6 @@ $(document).ready(function() {
         success: function(success) {
             location.reload();
             if (success){
-                alert();
             } else {
                 alert("Username already exists.");
             }

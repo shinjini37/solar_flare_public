@@ -304,6 +304,7 @@ $(document).ready(function(){
                         }         
                     },
                     error: function(xhr, status, error) {
+                        alert("Sorry, there was an error...");
                         console.log("Uh oh there was an error: " + error);
                     }
                 });
@@ -379,6 +380,7 @@ $(document).ready(function(){
                         play_music(current_music);
                     },
                     error: function(xhr, status, error) {
+                        alert("Sorry, there was an error...");
                         console.log("Uh oh there was an error: " + error);
                     }
                 });
@@ -391,13 +393,23 @@ $(document).ready(function(){
             
             
             $(".add-fav-number").click(function(){
+               $(".add-fav-number").text("Saving..."); 
+               $(".add-fav-number").attr('disabled', true); 
                $.ajax({
                   url: '/add_fav_num',
                     data: {current: current, player: user_playing},
                     type: 'POST',
                     success: function(data) {
+                        $(".add-fav-number").text("Added!"); 
+                        $(".add-fav-number").attr('disabled', false);
+                        setTimeout( function() { $(".add-fav-number").text("Add to favorite numbers!"); 
+                                        }, 500)
                     },
                     error: function(xhr, status, error) {
+                        alert("Sorry, there was an error...");
+                        $(".add-fav-number").text("Add to favorite numbers!"); 
+                        $(".add-fav-number").attr('disabled', false);
+                        
                         console.log("Uh oh there was an error: " + error);
                     }
                }); 

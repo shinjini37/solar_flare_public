@@ -16,7 +16,10 @@
                 {{/if}}
                 <div class="nav-profile">
                     <div class="profile-stuff">
-                        <h2>{{username}}</h2>
+                        <div class="username-area">
+                            <h2>{{username}}</h2>
+                        </div>
+                        <div class="nav-profile-content">
                         {{#if signed_in}}
                             {{#if user_own_profile}}
                                 <button class="fav-numbers"> My favorite numbers! </button>
@@ -28,6 +31,7 @@
                                     <button class="add-user-fav" data-username={{username}}>Add {{username}} to my favorites!</button>
                                 {{/if}}
                             {{/if}}
+                            
                             <br><br><br><br><br><br>
                             <div class='user-profile'>
                                 <button class='profile-button'>My Profile</button>
@@ -35,6 +39,7 @@
                             <br>
                             <button class="sign-out-button"> Sign Out </button>
                         {{/if}}
+                        </div>
                     </div>
                 </div>
             </div>

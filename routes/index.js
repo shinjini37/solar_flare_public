@@ -20,8 +20,8 @@ var recent_nums = function(list, len, username){
         if (list.length>0){
                 var recents = list[0]['recents'];
                 var limit;
-                if (recents.length> 100){
-                    limit = 100;
+                if (recents.length> 1000){
+                    limit = 1000;
                 } else {
                     limit = recents.length;
                 }          

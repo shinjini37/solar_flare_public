@@ -11,6 +11,7 @@
     text-align: center;
 }
 
+
 .fav-stuff-container{
     overflow: auto;
     margin: auto;
@@ -50,4 +51,16 @@
 
 .profile-main-buttons button{
     width: 15%;
+}
+
+.username-area{
+    width: 60%;
+    padding: 5%;
+    text-align: center;
+    font-size: large;
+    margin: auto;
+    height: 20%;
+    background-color: #457D7B;
+    word-wrap: break-word;
+    
 }

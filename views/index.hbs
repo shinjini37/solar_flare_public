@@ -14,40 +14,43 @@
                 </div>
                 {{/if}}
                 <div class="nav-profile">
-                    <br>
-                    <!--{{{welcome}}}-->
-                    <h2> Welcome, 
-                        {{#if signed_in}}
-                            <a href="/profile/{{username}}" >{{username}}!</a>
-                        {{else}} 
-                            Guest!
-                        {{/if}}
-                    </h2>
-                    <br>
-                    <div class="login-stuff">
-                    {{#if signed_in}}
-                        <div class='user-profile'>
-                            <button class='profile-button'>My Profile</button>
-                        </div>
-                            <br>
-                        <div class='sign-out'>
-                            <button class='sign-out-button'>Sign Out</button>
-                        </div>
-                    {{else}} 
-                        <div class='sign-in'>
-                            <input type='text' class='username' placeholder='username'> <br>
-                            <input type='password' class='password' placeholder='password'> <br>
-                            <button class='sign-in-button'>Sign In</button>
+                    <div class="nav-profile-content">
+                        <br>
+                        <div class="welcome">
+                        <h2> Welcome, 
+                            {{#if signed_in}}
+                                <a href="/profile/{{username}}" >{{username}}</a>!
+                            {{else}} 
+                                Guest!
+                            {{/if}}
+                        </h2>
                         </div>
                         <br>
-                        <div class='sign-up'>
-                            <button class='sign-up-button' 
-                            title="Signing up has many benefits! 
-                            You can save you favorite numbers, 
-                            visit other users and save them as your favorites, 
-                            and show off your best creations!">Sign Up!</button>
+                        <div class="login-stuff">
+                        {{#if signed_in}}
+                            <div class='user-profile'>
+                                <button class='profile-button'>My Profile</button>
+                            </div>
+                                <br>
+                            <div class='sign-out'>
+                                <button class='sign-out-button'>Sign Out</button>
+                            </div>
+                        {{else}} 
+                            <div class='sign-in'>
+                                <input type='text' class='username' placeholder='username'> <br>
+                                <input type='password' class='password' placeholder='password'> <br>
+                                <button class='sign-in-button'>Sign In</button>
+                            </div>
+                            <br>
+                            <div class='sign-up'>
+                                <button class='sign-up-button' 
+                                title="Signing up has many benefits! 
+                                You can save you favorite numbers, 
+                                visit other users and save them as your favorites, 
+                                and show off your best creations!">Sign Up!</button>
+                            </div>
+                        {{/if}}
                         </div>
-                    {{/if}}
                     </div>
                 </div>
             </div>
@@ -55,7 +58,12 @@
                 <div class="intro-container">
                     <div class='intro'>
                         <h1> Welcome to <i>NumeraMusa</i>! </h1>
-                        You can enter numbers below and <br> hear what it sounds like!
+                        At NumeraMusa, we love numbers. <br> 
+                        And we want to show the world just
+                        how beautiful numbers can be! <br><br>
+                        You can enter any number below, and <br> hear what it sounds like!
+                        It can be any number, <br> be it you birthday, your phone number, the day of the year! <br>
+                        Or you can press the &#9658 button above to hear our favorite, &#960!
                         <br><br>
                         You can also hear NumeraMusa (number-music) <br> created by others, to the left!
                     </div>
@@ -81,10 +89,11 @@
                     </div>
                 </div>  
                 <div class="enter-number">
-                    <input type="text" class="enter-number-text"  placeholder="Enter a number..." title="Enter a number here to play the music! Hint: Anything other than numbers will be ignored." onkeypress="return event.charCode >= 48 && event.charCode <= 57">
-                    <button class="enter-number-button" title="Hint: This might take some time, depending on how big your number is!">Generate!</button>
+                    <input type="text" class="enter-number-text"  placeholder="Enter a number..." title="Enter a number here to play the music! Hint: Anything other than numbers will be ignored.">
+                     <!-- onkeypress="return event.charCode >= 48 && event.charCode <= 57"-->
+                    <button class="enter-number-button" title="Hint: This might take some time, depending on how big your number is!"> Play! </button>
                     <br>
-                    <table title="Select the key and tempo of your NumeraMusa!">
+                    <table>
                         <tr>
                             <td>
                     <select id = "pitch">
@@ -111,14 +120,12 @@
                         <option value="harmonic minor">Harmonic minor</option>
                     </select>
                             </td>
-                            <td>
-                                <div class="tempo">
-                                <input class="actu-tempo" name="Tempo" type="range" min="1.25" max="7" value="2.5" />
-                                </div>
-                            </td>
                         </tr>
                     </table>
-                   
+                    <br>
+                    <div class="tempo"> <!--&#9833--> Tempo <br>
+                        <input class="actu-tempo" name="Tempo" type="range" min="1.25" max="6" value="2.5" />
+                    </div>
                     <!--
                     <br>
                     <button class="digit" name="0">0</button>

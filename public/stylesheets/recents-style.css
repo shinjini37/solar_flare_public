@@ -30,9 +30,22 @@
 }
 
 a{
-    color: #85DFDF;
+    color: #6D9AC7;
     text-decoration: none;
 }
+
+.recent a{
+    color: #85DFDF;
+}
+
+.logo a{
+    color: #45617D;
+}
+
+.logo a:hover{
+    color: #5F86AD;
+}
+
 
 a:hover{
     color: #ecf0f1;
