@@ -304,14 +304,26 @@ router.post('/find_user', function (req, res, next) {
     var username = req.body.username;
     console.log("username");
     console.log(req.body);
-    db.people.find({'username': username}).toArray(function(err, list) {
+    //https://blog.serverdensity.com/checking-if-a-document-exists-mongodb-slow-findone-vs-find/
+
+    db.people.find({'username': username}).limit(1).toArray(function(err, list){
+            console.log(list);
+        if (list.length>0){
+            res.send(true);
+        } else {
+            res.send(false);
+        }    
+    });
+    
+    /*
+    db.people.findOne({'username': username}).toArray(function(err, list) {
         console.log(list);
         if (list.length>0){
             res.send(true);
         } else { 
             res.send(false);
         }
-    });
+    });*/
 
 
 
@@ -352,7 +364,7 @@ router.get('/profile/:username', function (req, res, next) {
         }
     }
     
-    db.people.find({'username': username}).toArray(function(err, list) {
+    db.people.find({'username': username}).limit(1).toArray(function(err, list) {
         if (list.length>0){ // only registered users get profiles
             if (username === 'anon'){ // anon doesn't have a profile
                 res.redirect("/");
