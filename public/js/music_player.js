@@ -59,7 +59,8 @@ $(document).ready(function(){
     // of 0.3 seconds
     var play_music = function(music){
         var notestoplay_i = 0; 
-        var beat = 2000/(($('.actu-tempo').val())*($('.actu-tempo').val()));
+        var tempo = ($('.actu-tempo').val()/10);
+        var beat = 2000/(tempo*tempo);
         if (isNaN(beat)){
             beat = 300;
         }
