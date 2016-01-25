@@ -255,6 +255,8 @@ $(document).ready(function(){
                             data: {},
                             type: 'POST',
                             success: function(data) {
+                                // the fade out/fade in effect is inspired by the below post:
+                                // http://stackoverflow.com/questions/18490026/refresh-reload-the-content-in-div-using-jquery-ajax
                                 $(".recent-list").fadeOut(800, function() {
                                     // changing the html to the data recieved
                                     $(".recent-list").html(data);
