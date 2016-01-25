@@ -22,7 +22,7 @@
                                 <button class="fav-users"> My favorite users! </button>
                             {{else}}
                                 {{#if in_fav_users}}
-                                    <div> {{username}} is one of your favorites! </div>
+                                    <button class="add-user-fav" data-username={{username}}>Remove {{username}} from my favorites!</button>
                                 {{else}}
                                     <button class="add-user-fav" data-username={{username}}>Add {{username}} to my favorites!</button>
                                 {{/if}}

@@ -512,19 +512,21 @@ router.post("/add_fav_user", function(req, res, next){
             var already_in = false;
             
             if (list.length>0){
-                /*
+                
                 var fav_users = list[0]['fav_users'];
                 for (var i = 0; i < fav_users.length; i++) {
                     if (fav_users[i].fav_username === fav_username) {
                         already_in = true;
+                        console.log("508");
+                        db.userfavusers.update({username: sess.username}, { $pull: {fav_users:{fav_username:fav_username}}});
                         break;
                     }
                 } 
                 if (!already_in){
                     db.userfavusers.update({username: sess.username}, { $addToSet: {fav_users:{fav_username:fav_username}}});
                 }
-                */    
-                db.userfavusers.update({username: sess.username}, { $addToSet: {fav_users:{fav_username:fav_username}}});
+                    
+                //db.userfavusers.update({username: sess.username}, { $addToSet: {fav_users:{fav_username:fav_username}}});
             } else { // if recentnums is empty, make an empty array and populate it
                 db.userfavusers.insert({username: sess.username, fav_users:[]});
                 db.userfavusers.update({username: sess.username}, { $addToSet: {fav_users:{fav_username:fav_username}}});
