@@ -26,11 +26,15 @@ $(document).ready(function() {
             type: 'POST',
             success: function(already_in) {
                 if (!already_in){
+                    console.log("29");
                     location.reload();
-                    $(".add-user-fav").replaceWith(fav_username+" is one of your favorites!")
+                    $(".add-user-fav").text("Remove " + fav_username + "from my favorites!");
                     //alert(fav_username + " has been added to your favorites!");
                 }else{
-                    alert(fav_username+" is aleady in your favorites!");
+                    console.log("34");
+                    location.reload();
+                    $(".add-user-fav").text("Add " + fav_username + "to my favorites!");
+
                 }
             },
             error: function() {
