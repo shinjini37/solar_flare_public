@@ -117,8 +117,6 @@ $(document).ready(function() {
 
   $(".search-button").click(function(){
      var username = $(".search-text").val();
-     console.log(username);
-     console.log("waat");
      $.ajax({
       url: '/find_user',
       data: {username: username},
@@ -129,9 +127,9 @@ $(document).ready(function() {
             window.location = "/profile/"+username;
           } else {
               $(".search-result").text("User not found");
-              setTimeout( function() { $(".search-result").fadeOut(800, function() {
-                                                                $(".search-result").text("");
-                                                            }); 
+              console.log("user not found");
+              
+              setTimeout( function() { $(".search-result").text(""); 
                                         }, 700)
           }
       },
