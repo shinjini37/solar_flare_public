@@ -150,4 +150,24 @@ $(document).ready(function() {
     $(".enter-number-text").val(current_number);
   });
 
+  // clicking "enter" when in a text box triggers some buttons, obtained from
+  // http://stackoverflow.com/questions/155188/trigger-a-button-click-with-javascript-on-the-enter-key-in-a-text-box
+  $(".password").keyup(function(event){
+    if(event.keyCode == 13){
+        $(".sign-in-button").click();
+    }
+  });
+
+  $(".enter-number-text").keyup(function(event){
+    if(event.keyCode == 13){
+        $(".enter-number-button").click();
+    }
+  });
+
+  $(".search-text").keyup(function(event){
+    if(event.keyCode == 13){
+        $(".search-button").click();
+    }
+  });
+
 });
