@@ -104,6 +104,8 @@ router.get('/', function (req, res, next) {
 router.post('/enter_number', function (req, res, next) {
     sess=req.session;
     
+    
+    /* This idea of handling asynchronous calls obtained from http://stackoverflow.com/questions/18008479/node-js-wait-for-multiple-async-calls */
     // for asynchronous calls
     var one = null;
     var two = null;

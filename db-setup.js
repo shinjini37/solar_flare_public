@@ -1,3 +1,5 @@
+/* This file is an almost exact replica of the file from the 6.148 mongodb tutorial, with
+necessary modifications made */
 var mongo = require('mongodb').MongoClient;
 
 //var dbConnectionUrl = 'mongodb://localhost:27017/test';

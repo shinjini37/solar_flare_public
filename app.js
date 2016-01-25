@@ -1,3 +1,5 @@
+/* This file is an almost exact replica of the file from the 6.148 tutorials, with
+necessary modifications made  */
 var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');

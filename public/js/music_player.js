@@ -59,7 +59,7 @@ $(document).ready(function(){
     // of 0.3 seconds
     var play_music = function(music){
         var notestoplay_i = 0; 
-        var beat = 2000/($('.actu-tempo').val());
+        var beat = 2000/(($('.actu-tempo').val())*($('.actu-tempo').val()));
         if (isNaN(beat)){
             beat = 300;
         }
@@ -128,8 +128,7 @@ $(document).ready(function(){
     
     // variables
     var timeouts = [];
-    var piep = '31415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679';
-    console.log(piep.length);
+    /* 1000 places of pi obtained from http://www-groups.dcs.st-and.ac.uk/history/HistTopics/1000_places.html*/
     var pie =   '314159265358979323846264338327950288419716939937510'+
                 '58209749445923078164062862089986280348253421170679'+
                 '82148086513282306647093844609550582231725359408128'+
@@ -208,6 +207,7 @@ $(document).ready(function(){
         }
     });
 
+    /* Soundmanager obtained from http://www.schillmania.com/projects/soundmanager2*/
     // soundmanager setup    
     soundManager.setup({
         url: '/soundmanager2/sfw',
@@ -219,6 +219,7 @@ $(document).ready(function(){
                 // get the number
                 var number_entered = $(".enter-number-text").val();
                 
+                /* This method of taking out only the number is obtained from http://stackoverflow.com/questions/10003683/javascript-get-number-from-string*/
                 // take out only the number
                 number_entered = number_entered.match(/\d/g);
                 number_entered = number_entered.join("");
@@ -329,6 +330,7 @@ $(document).ready(function(){
                 paused = true; 
                 music_playing = false;
                 
+                /* This method of clearing timeouts obtained from http://stackoverflow.com/questions/8860188/is-there-a-way-to-clear-all-time-outs */
                 // clear out all music set to be played later
                 for (var i = 0; i < timeouts.length; i++) {
                     clearTimeout(timeouts[i]);
@@ -338,6 +340,8 @@ $(document).ready(function(){
                 timeouts = [];
             });
             
+            /* Adding event listeners on dynamically created elements obtained from 
+            http://stackoverflow.com/questions/2552745/dynamically-add-listener-to-ajax-created-content-in-jquery */
             // when a recent number is clicked to be played              
             $(".recent").on('click',".play_recent", function(){
                 // get data to play the music
