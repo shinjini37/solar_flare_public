@@ -82,9 +82,9 @@
                 </div>  
                 <div class="enter-number">
                     <input type="text" class="enter-number-text"  placeholder="Enter a number..." title="Enter a number here to play the music! Hint: Anything other than numbers will be ignored." onkeypress="return event.charCode >= 48 && event.charCode <= 57">
-                    <button class="enter-number-button">Generate!</button>
+                    <button class="enter-number-button" title="Hint: This might take some time, depending on how big your number is!">Generate!</button>
                     <br>
-                    <table>
+                    <table title="Select the key and tempo of your NumeraMusa!">
                         <tr>
                             <td>
                     <select id = "pitch">
@@ -110,6 +110,11 @@
                         <option value="natural minor">Natural minor</option>
                         <option value="harmonic minor">Harmonic minor</option>
                     </select>
+                            </td>
+                            <td>
+                                <div class="tempo">
+                                <input class="actu-tempo" name="Tempo" type="range" min="1" max="16" value="7" />
+                                </div>
                             </td>
                         </tr>
                     </table>

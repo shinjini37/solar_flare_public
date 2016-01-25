@@ -59,14 +59,19 @@ $(document).ready(function(){
     // of 0.3 seconds
     var play_music = function(music){
         var notestoplay_i = 0; 
-
+        var beat = 2000/($('.actu-tempo').val());
+        if (isNaN(beat)){
+            beat = 300;
+        }
+        
+        
         for (var i = 0; i< music.length; i++){
             if (!(i === music.length-1)){
                 timeouts.push(setTimeout( function() {
                     music[notestoplay_i].play();
                     curr_index += 1;
                     notestoplay_i++;
-                    }, (.5+i)*300));
+                    }, (.5+i)*beat));
             } else { // on the last note, reset variables
                 timeouts.push(setTimeout( function() {
                     music[notestoplay_i].play({
@@ -77,7 +82,7 @@ $(document).ready(function(){
                         }});
                     curr_index += 1;
                     notestoplay_i++;
-                    }, (.5+i)*300));
+                    }, (.5+i)*beat));
             }
         }
     }
@@ -290,6 +295,7 @@ $(document).ready(function(){
                                 if (!(current_music.length>0)){
                                     current_music = convert(current);
                                 }
+                                update_music_info(user_playing, current);
                                 play_music(current_music);
                             } else { // if paused, play from where it was paused
                                 play_music(current_music.slice(curr_index));
