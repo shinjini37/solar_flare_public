@@ -91,3 +91,7 @@ input{
     margin-left: 15%;
     width: 100%;
 }
+
+.signed-in-as input{
+    padding: 5px;
+}

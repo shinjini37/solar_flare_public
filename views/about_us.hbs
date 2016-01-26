@@ -5,7 +5,21 @@
         {{> links_partial}}
     </head>
     <body>
-        {{> top_body_partial}}
+        <div class="top-body-container">
+            {{> logo_partial}}
+            <div class="music-player-container">
+                <div class="music-player"><!--Music Player--><br>
+                    <!-- Symbols used here and other special symbols were obtained from http://www.w3schools.com/charsets/ref_utf_symbols.asp -->
+                    <button class="play"> &#9658; </button>
+                    <button class="pause"> &#10074;&#10074; </button>
+                    <button class="stop"> <!--&#9689--> &#9632; </button>  
+                    <div class="playing_user_container">
+                        <div class="player_text playing"></div>
+                        <div class="player_text user"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="main-body-container">
             <div class="nav-profile-full">
             </div>
