@@ -150,9 +150,15 @@ $(document).ready(function() {
 
   // clicking "enter" when in a text box triggers some buttons, obtained from
   // http://stackoverflow.com/questions/155188/trigger-a-button-click-with-javascript-on-the-enter-key-in-a-text-box
-  $(".password").keyup(function(event){
+  $(".password.signin").keyup(function(event){
     if(event.keyCode == 13){
         $(".sign-in-button").click();
+    }
+  });
+
+   $(".password.signup.verify").keyup(function(event){
+    if(event.keyCode == 13){
+        $(".sign-up-button.signup").click();
     }
   });
 
