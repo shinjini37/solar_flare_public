@@ -19,14 +19,14 @@ $(document).ready(function() {
     
     $(".add-user-fav").click(function(){
         var fav_username = $(this).data('username');
-        $("add-user-fav").text("Updating your favorites...");
-        $("add-user-fav").attr('disabled', true);
+        $(".add-user-fav").text("Updating your favorites...");
+        $(".add-user-fav").attr('disabled', true);
         $.ajax({
             url: '/add_fav_user',
             data: {fav_username: fav_username},
             type: 'POST',
             success: function(already_in) {
-                $("add-user-fav").attr("disabled", false);
+                $(".add-user-fav").attr("disabled", false);
                 if (!already_in){
                     console.log("29");
                     //location.reload();
@@ -40,7 +40,7 @@ $(document).ready(function() {
                 }
             },
             error: function() {
-                $("add-user-fav").attr("disabled", false);
+                $(".add-user-fav").attr("disabled", false);
                 alert("Sorry, there was an error...");
                 console.log("error in add user as favorite");
             }
