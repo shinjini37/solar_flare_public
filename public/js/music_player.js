@@ -216,64 +216,69 @@ $(document).ready(function(){
 
             // when a new number is entered by user
             $(".enter-number-button").click(function() {
-
+                
                 // get the number
                 var number_entered = $(".enter-number-text").val();
                 
-                /* This method of taking out only the number is obtained from http://stackoverflow.com/questions/10003683/javascript-get-number-from-string*/
-                // take out only the number
-                number_entered = number_entered.match(/\d/g);
-                number_entered = number_entered.join("");
-                
-                // send the AJAX request
-                $.ajax({
-                    url: '/enter_number',
-                    data: {
-                        'num': number_entered
-                    },
-                    type: 'POST',
-                    success: function(data) {
-                        
-                        // clear text
-                        $(".enter-number-text").val("");
-                        
-                        //update current number
-                        current = number_entered;
-                        curr_index = 0;
-                        
-                        // update music display info
-                        update_music_info(data, number_entered);
-                        
-                        // play the number
-                        current_music = convert(number_entered);
-                        play_music(current_music);
-                        music_playing = true;
+                if (!(number_entered==="")){
+                    $(".enter-number-button").attr("disabled", true);
+                    
+                    /* This method of taking out only the number is obtained from http://stackoverflow.com/questions/10003683/javascript-get-number-from-string*/
+                    // take out only the number
+                    number_entered = number_entered.match(/\d/g);
+                    number_entered = number_entered.join("");
+                    
+                    // send the AJAX request
+                    $.ajax({
+                        url: '/enter_number',
+                        data: {
+                            'num': number_entered
+                        },
+                        type: 'POST',
+                        success: function(data) {
+                            $(".enter-number-button").attr("disabled", false);
+                            // clear text
+                            $(".enter-number-text").val("");
+                            
+                            //update current number
+                            current = number_entered;
+                            curr_index = 0;
+                            
+                            // update music display info
+                            update_music_info(data, number_entered);
+                            
+                            // play the number
+                            current_music = convert(number_entered);
+                            play_music(current_music);
+                            music_playing = true;
 
-                        // update recent in database
-                        $.ajax({
-                            url: '/update_recent_numbers',
-                            data: {},
-                            type: 'POST',
-                            success: function(data) {
-                                // the fade out/fade in effect is inspired by the below post:
-                                // http://stackoverflow.com/questions/18490026/refresh-reload-the-content-in-div-using-jquery-ajax
-                                $(".recent-list").fadeOut(800, function() {
-                                    // changing the html to the data recieved
-                                    $(".recent-list").html(data);
-                                });
-                                $(".recent-list").fadeIn().delay(2000);
-                            },
-                            error: function(xhr, status, error) {
-                                console.log("Uh oh there was an error: " + error);
-                            }
-                        });     
-                        
-                    },
-                    error: function(xhr, status, error) {
-                        console.log("Uh oh there was an error: " + error);
-                    }
+                            // update recent in database
+                            $.ajax({
+                                url: '/update_recent_numbers',
+                                data: {},
+                                type: 'POST',
+                                success: function(data) {
+                                    // the fade out/fade in effect is inspired by the below post:
+                                    // http://stackoverflow.com/questions/18490026/refresh-reload-the-content-in-div-using-jquery-ajax
+                                    $(".recent-list").fadeOut(800, function() {
+                                        // changing the html to the data recieved
+                                        $(".recent-list").html(data);
+                                    });
+                                    $(".recent-list").fadeIn().delay(2000);
+                                },
+                                error: function(xhr, status, error) {
+                                    console.log("Uh oh there was an error: " + error);
+                                }
+                            });     
+                            
+                        },
+                        error: function(xhr, status, error) {
+                            $(".enter-number-button").attr("disabled", false);
+                            console.log("Uh oh there was an error: " + error);
+                        }
 
-                });
+                    });
+                }
             });
             
             // when play button is clicked
