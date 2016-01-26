@@ -540,4 +540,9 @@ router.post("/add_fav_user", function(req, res, next){
 });
 
 
+router.get('/about_us', function (req, res, next) {
+    res.render("about_us.hbs");
+});
+
+
 module.exports = router;

@@ -109,3 +109,8 @@ select{
     width: 70%;
     word-wrap: break-word;
 }
+
+.about-us{
+    text-align: center;
+    width: 100%;
+}
