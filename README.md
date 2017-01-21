@@ -1,6 +1,6 @@
-####Solar Flare
+#Solar Flare
 
-##Credits
+###Credits
 
 Shinjini Saha
 
@@ -10,7 +10,7 @@ Huy Pham
 
 
 
-##Citations:
+###Citations:
 
 1. Most code in the stylesheets have been obtained from http://www.w3schools.com/cssref/
 2. Ajax was obtained from the link below, as per the 6.148 tutorial on ajax
